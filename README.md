@@ -1,2 +1,3 @@
 # JS-Course
-Basic to advanced JS
+Basic to advanced JS course
+

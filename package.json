@@ -1,0 +1,16 @@
+{
+  "name": "dhs",
+  "version": "46.0.0",
+  "description": "web aplliain bacekdn",
+  "main": "index1.js",
+  "scripts": {
+    "starthuoow": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "hnvn",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14"
+  }
+}

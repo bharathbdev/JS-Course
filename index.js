@@ -1,142 +1,104 @@
 const http = require('http');
 const { readFileSync, writeFileSync } = require('./files');
 
-// Our fake database - just an array of objects
 let users = [
     {id: 1, name: "John", age: 25}, 
-    {id: 2, name: "Jane", age: 30}
+    {id: 2, name: "Jane", age: 30},
+    {id: 3, name: "John", age: 22},
 ];
 
-// Create server
 const server = http.createServer((req, res) => {
-    // Set headers so browser can call our API
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');
-
     console.log(req.url, req.method);
-
-    // Get URL parts: /users/1 -> ['', 'users', '1'] 
     const urlParts = req.url.split('/');
-    const userId = urlParts[2]; // Get ID if exists
+    const userId = urlParts[2];
     
-    // Get request body (payload)
     let body = '';
     req.on('data', chunk => body += chunk);
     req.on('end', () => {
         
-        // Simple test endpoint
+        // Test endpoint
         if (req.url === '/test' && req.method === 'GET') {
-            const data = {
-                name: 'Bharath',
-            };
-            const finalData = JSON.stringify(data);
-            res.end(finalData);
-            return;
-        }
-        // File reading endpoint
-        if (req.url === '/file' && req.method === 'GET') {
-            const fileContent = readFileSync();
-            res.end(JSON.stringify({content: fileContent}));
+            res.end(JSON.stringify({name: 'Bharath'}));
             return;
         }
         
-        // File writing endpoint
-        if (req.url === '/file' && req.method === 'POST') {
-            const requestData = JSON.parse(body);
-            const result = writeFileSync(requestData.content);
-            res.end(JSON.stringify({message: result}));
+        // All users with optional search
+        if (req.url === '/users' && req.method === 'GET') {
+            res.end(JSON.stringify(users));
             return;
         }
         
-        // Check if URL starts with /users (fixes single user GET)
-        if(req.url.startsWith('/users')) {
-        // GET: Return all users or single user
-        if (req.method === 'GET') {
-            if (userId) {
-                // Find user using findIndex
-                const userIndex = users.findIndex((v, i, a) => {
-                    return v.id == userId;
-                });
-                const user = userIndex !== -1 ? users[userIndex] : null;
-                let finalData;
-                if (user) {
-                    finalData = user;
-                } else {
-                    finalData = {error: 'User not found'};
-                }
-                res.end(JSON.stringify(finalData));
-            } else {
-                // Check if there are query parameters for search
-                const url = new URL(req.url, `http://${req.headers.host}`);
-                const searchName = url.searchParams.get('name');
-                
-                if (searchName) {
-                    // Search users by name using filter
-                    const filteredUsers = users.filter((v, i, a) => {
-                        return v.name.toLowerCase().includes(searchName.toLowerCase());
-                    });
-                    const searchResponse = JSON.stringify(filteredUsers);
-                    res.end(searchResponse);
-                } else {
-                    // Return all users
-                    const allUsersResponse = JSON.stringify(users);
-                    res.end(allUsersResponse);
-                }
-            }
+        // Search users via /users?name=
+        if (req.url.includes('/users?') && req.method === 'GET') {
+            const url = new URL(req.url, `http://${req.headers.host}`);
+            const name = url.searchParams.get('name');
+            const filtered = users.filter(u => u.name.toLowerCase().includes(name.toLowerCase()));
+            res.end(JSON.stringify(filtered));
+            return;
         }
         
-        // POST: Create new user
-        else if (req.method === 'POST') {
-            const newUser = JSON.parse(body);
-            newUser.id = users.length + 1;
+        // Create user
+        if (req.url === '/users' && req.method === 'POST') {
+            const newUser = {...JSON.parse(body), id: users.length + 1};
             users.push(newUser);
-            const response = JSON.stringify(newUser);
-            res.end(response);
+            res.end(JSON.stringify({message: 'User created'}));
+            return;
         }
         
-        // PUT: Update user
-        else if (req.method === 'PUT') {
-            const updateData = JSON.parse(body);
-            // Find user index using findIndex
-            const userIndex = users.findIndex((v, i, a) => {
-                return v.id == userId;
-            });
-            if (userIndex !== -1) {
-                const updatedUser = {...updateData};
-                users[userIndex] = updatedUser;
-                res.end(JSON.stringify(updatedUser));
-            } else {
-                const errorResponse = {error: 'User not found'};
-                res.end(JSON.stringify(errorResponse));
-            }
+        // Update user
+        if (urlParts[1] === 'users' && userId && req.method === 'PUT') {
+            const index = users.findIndex(u => u.id == userId);
+            users[index] = JSON.parse(body);
+            res.end(JSON.stringify({message: 'User updated'}));
+            return;
         }
         
-        // DELETE: Remove user using splice
-        else if (req.method === 'DELETE') {
-            // Find user index using findIndex
-            const userIndex = users.findIndex((v, i, a) => {
-                return v.id == userId;
-            });
-            if (userIndex !== -1) {
-                users.splice(userIndex, 1);
-                const successResponse = {message: 'User deleted'};
-                res.end(JSON.stringify(successResponse));
-            } else {
-                const errorResponse = {error: 'User not found'};
-                res.end(JSON.stringify(errorResponse));
-            }
+        // Delete user
+        if (urlParts[1] === 'users' && userId && req.method === 'DELETE') {
+            const index = users.findIndex(u => u.id == userId);
+            users.splice(index, 1);
+            res.end(JSON.stringify({message: 'User deleted'}));
+            return;
         }
-    } else {
-        const errorResponse = {error: 'Endpoint not found'};
-        res.end(JSON.stringify(errorResponse));
-    }
+        
+        // Get single user
+        if (urlParts[1] === 'users' && userId && req.method === 'GET') {
+            const index = users.findIndex(u => u.id == userId);
+            res.end(JSON.stringify(users[index]));
+            return;
+        }
+        
+        // Search users via /search?name=
+        if (req.url.includes('/search?') && req.method === 'GET') {
+            const url = new URL(req.url, `http://${req.headers.host}`);
+            const name = url.searchParams.get('name');
+            const filtered = users.filter(u => u.name.toLowerCase().includes(name.toLowerCase()));
+            res.end(JSON.stringify(filtered));
+            return;
+        }
+        
+        // Read file
+        if (req.url === '/file' && req.method === 'GET') {
+            const content = readFileSync();
+            res.end(JSON.stringify({content}));
+            return;
+        }
+        
+        // Write file
+        if (req.url === '/file' && req.method === 'POST') {
+            writeFileSync(JSON.parse(body).content);
+            res.end(JSON.stringify({message: "File written successfully"}));
+            return;
+        }
+        
+        res.end(JSON.stringify({error: 'Endpoint not found'}));
     });
 });
 
-// Start server on port 3000
 server.listen(3000, () => {
     console.log('🚀 Server running on http://localhost:3000');
-    console.log('Try: GET http://localhost:3000/users');
 });
 
 

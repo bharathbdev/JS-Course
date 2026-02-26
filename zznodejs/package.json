@@ -4,7 +4,7 @@
   "description": "web aplliain bacekdn",
   "main": "app.js",
   "scripts": {
-    "noramalhttp": "node index.js",
+    "normalhttp": "nodemon index.js",
     "expresscode": "nodemon express.js",
     "db": "nodemon expresswithdb.js",
     "middleware": "nodemon expresswithmiddleware.js"

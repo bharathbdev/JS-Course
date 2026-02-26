@@ -30,8 +30,8 @@ app.get('/test', (req, res) => {
 });
 
 app.get('/users', async (req, res) => {
-    const users = await users.find({}).toArray();
-    res.json(users);
+    const allUsers = await users.find({}).toArray();
+    res.json(allUsers);
 });
 
 app.post('/users', async (req, res) => {

@@ -74,7 +74,7 @@ const server = http.createServer((req, res) => {
         if (req.url.includes('/search?') && req.method === 'GET') {
             const url = new URL(req.url, `http://${req.headers.host}`);
             const name = url.searchParams.get('name');
-            const filtered = users.filter(u => u.name.toLowerCase().includes(name.toLowerCase()));
+            const filtered = users.filter(u => u.name == name);
             res.end(JSON.stringify(filtered));
             return;
         }

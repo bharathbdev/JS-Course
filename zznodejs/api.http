@@ -1,24 +1,8 @@
 ### Test Endpoint
 GET http://localhost:3000/test
 
-### Protected Route - WITHOUT Auth (will fail)
-GET http://localhost:3000/protected
-
-### Protected Route - WITH Auth (will work)
-GET http://localhost:3000/protected
-Authorization: Bearer secret123
-
 ### Get All Users
 GET http://localhost:3000/users
-
-### Search Users - Find John
-GET http://localhost:3000/search?name=John
-
-### Search Users - Find Jane  
-GET http://localhost:3000/search?name=Jane
-
-### Search Users - Case insensitive
-GET http://localhost:3000/search?name=bob
 
 ### Create New User - Bob
 POST http://localhost:3000/users
@@ -29,17 +13,6 @@ Content-Type: application/json
   "age": 35
 }
 
-### Create New User - Alice
-POST http://localhost:3000/users
-Content-Type: application/json
-
-{
-  "name": "Alice", 
-  "age": 28
-}
-
-### Get Single User by ID (Replace with actual MongoDB ObjectId)
-GET http://localhost:3000/users/1
 
 ### Update User by ID (Replace with actual MongoDB ObjectId)
 PUT http://localhost:3000/users/1
@@ -53,6 +26,13 @@ Content-Type: application/json
 ### Delete User by ID (Replace with actual MongoDB ObjectId)
 DELETE http://localhost:3000/users/2
 
+### Search Users - Case insensitive
+GET http://localhost:3000/search?name=John
+
+
+### Get Single User by ID (Replace with actual MongoDB ObjectId)
+GET http://localhost:3000/users/1
+
 ### Read File Endpoint
 GET http://localhost:3000/file
 
@@ -63,3 +43,10 @@ Content-Type: application/json
 {
   "content": "New content written from API!\nThis replaces the old content.\nTimestamp: 2026-02-26"
 }
+
+### Protected Route - WITHOUT Auth (will fail)
+GET http://localhost:3000/protected
+
+### Protected Route - WITH Auth (will work)
+GET http://localhost:3000/protected
+Authorization: Bearer secret123

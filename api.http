@@ -1,28 +1,24 @@
 ### Test Endpoint
 GET http://localhost:3000/test
 
-### Read File Endpoint
-GET http://localhost:3000/file
+### Protected Route - WITHOUT Auth (will fail)
+GET http://localhost:3000/protected
 
-### Write to File Endpoint
-POST http://localhost:3000/file
-Content-Type: application/json
-
-{
-  "content": "New content written from API!\nThis replaces the old content.\nTimestamp: 2026-02-25"
-}
+### Protected Route - WITH Auth (will work)
+GET http://localhost:3000/protected
+Authorization: Bearer secret123
 
 ### Get All Users
 GET http://localhost:3000/users
 
-### Search Users by Name
-GET http://localhost:3000/users?name=john
+### Search Users - Find John
+GET http://localhost:3000/search?name=John
 
-### Get Single User (ID: 1)
-GET http://localhost:3000/users/1
+### Search Users - Find Jane  
+GET http://localhost:3000/search?name=Jane
 
-### Get Single User (ID: 2)
-GET http://localhost:3000/users/2
+### Search Users - Case insensitive
+GET http://localhost:3000/search?name=bob
 
 ### Create New User - Bob
 POST http://localhost:3000/users
@@ -38,30 +34,32 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "name": "Alice",
+  "name": "Alice", 
   "age": 28
 }
 
-### Update User (ID: 1) - Full Update
+### Get Single User by ID (Replace with actual MongoDB ObjectId)
+GET http://localhost:3000/users/1
+
+### Update User by ID (Replace with actual MongoDB ObjectId)
 PUT http://localhost:3000/users/1
 Content-Type: application/json
 
 { "id": 1,
-  "name": "Updated John",
+  "name": "Updated Bob",
   "age": 40
 }
 
-### Update User (ID: 2) - Partial Update (Age Only)
-PUT http://localhost:3000/users/2
+### Delete User by ID (Replace with actual MongoDB ObjectId)
+DELETE http://localhost:3000/users/2
+
+### Read File Endpoint
+GET http://localhost:3000/file
+
+### Write to File Endpoint
+POST http://localhost:3000/file
 Content-Type: application/json
 
-{ "id": 2,
-  "name": "Updated jane",
-  "age": 48
+{
+  "content": "New content written from API!\nThis replaces the old content.\nTimestamp: 2026-02-26"
 }
-
-### Delete User (ID: 1)
-DELETE http://localhost:3000/users/1
-
-### Delete User (ID: 2)
-DELETE http://localhost:3000/users/2

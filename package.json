@@ -2,15 +2,18 @@
   "name": "dhs",
   "version": "46.0.0",
   "description": "web aplliain bacekdn",
-  "main": "index1.js",
+  "main": "app.js",
   "scripts": {
-    "starthuoow": "node index.js",
-    "dev": "nodemon index.js"
+    "noramalhttp": "node index.js",
+    "expresscode": "nodemon express.js",
+    "db": "nodemon expresswithdb.js",
+    "middleware": "nodemon expresswithmiddleware.js"
   },
   "author": "hnvn",
   "license": "ISC",
   "dependencies": {
     "express": "^5.2.1",
+    "mongodb": "^7.1.0",
     "nodemon": "^3.1.14"
   }
 }

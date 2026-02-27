@@ -1,0 +1,15 @@
+## Quick Reference
+- 2xx: Success responses
+- 3xx: Redirects
+- 4xx: Client mistakes
+- 5xx: Server problems
+
+## Common API Usage
+- GET success: 200
+- POST success: 201
+- PUT/PATCH success: 200 or 204
+- DELETE success: 200 or 204
+- Validation errors: 400 or 422
+- Auth errors: 401 or 403
+- Not found: 404
+- Server crashes: 500

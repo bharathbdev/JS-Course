@@ -50,3 +50,32 @@ GET http://localhost:3000/protected
 ### Protected Route - WITH Auth (will work)
 GET http://localhost:3000/protected
 Authorization: Bearer secret123
+
+###
+### JWT Authentication Endpoints (Use jwtauth.js)
+###
+
+### Register New User
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "testpass123"
+}
+
+### Sign In (Login)
+POST http://localhost:3000/signin
+Content-Type: application/json
+
+{
+  "username": "testuser", 
+  "password": "testpass123"
+}
+
+### Public Route (No Auth Required)
+GET http://localhost:3000/public
+
+### Protected Route (JWT Required) - Replace YOUR_JWT_TOKEN_HERE with actual token from signin
+GET http://localhost:3000/protected
+Authorization: Bearer YOUR_JWT_TOKEN_HERE

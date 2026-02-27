@@ -7,12 +7,14 @@
     "normalhttp": "nodemon index.js",
     "expresscode": "nodemon express.js",
     "db": "nodemon expresswithdb.js",
-    "middleware": "nodemon expresswithmiddleware.js"
+    "middleware": "nodemon expresswithmiddleware.js",
+    "auth": "nodemon jwtauth.js"
   },
   "author": "hnvn",
   "license": "ISC",
   "dependencies": {
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.1.0",
     "nodemon": "^3.1.14"
   }

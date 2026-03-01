@@ -79,10 +79,6 @@ function ChatInput() {
     input.value = '';
     
     ChatMessages();
-    
-    // Auto scroll to bottom like React useEffect
-    const container = document.getElementById('chatMessages');
-    container.scrollTop = container.scrollHeight;
   }
   
   input.addEventListener('input', saveInputText);
@@ -132,9 +128,6 @@ function ChatMessages() {
     const messageElement = ChatMessage(chatMessage.message, chatMessage.sender);
     container.appendChild(messageElement);
   });
-  
-  // Auto scroll to bottom after adding messages
-  container.scrollTop = container.scrollHeight;
 }
 
 // App functionality - matches React version structure

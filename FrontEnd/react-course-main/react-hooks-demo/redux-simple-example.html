@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux Simple Example</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- React, ReactDOM, Redux and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/redux@4.2.1/dist/redux.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-redux@8.1.3/dist/react-redux.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { createStore } = Redux;
+        const { Provider, useSelector, useDispatch } = ReactRedux;
+
+        // 1. ACTIONS - What can happen
+        const increment = () => ({
+            type: 'INCREMENT'
+        });
+
+        const decrement = () => ({
+            type: 'DECREMENT'
+        });
+
+        const reset = () => ({
+            type: 'RESET'
+        });
+
+        // 2. REDUCER - How state changes
+        const counterReducer = (state = { count: 0 }, action) => {
+            switch (action.type) {
+                case 'INCREMENT':
+                    return { count: state.count + 1 };
+                case 'DECREMENT':
+                    return { count: state.count - 1 };
+                case 'RESET':
+                    return { count: 0 };
+                default:
+                    return state;
+            }
+        };
+
+        // 3. STORE - Holds the state
+        const store = createStore(counterReducer);
+
+        // 4. COMPONENT - Uses Redux state
+        function Counter() {
+            // Get state from Redux store
+            const count = useSelector(state => state.count);
+            
+            // Get dispatch function to send actions
+            const dispatch = useDispatch();
+
+            return (
+                <div className="container mt-5">
+                    <div className="card">
+                        <div className="card-header text-center">
+                            <h2>Redux Simple Example</h2>
+                        </div>
+                        <div className="card-body text-center">
+                            <h1 className="display-1 mb-4">{count}</h1>
+                            
+                            <div className="d-flex justify-content-center gap-3">
+                                <button 
+                                    className="btn btn-success btn-lg" 
+                                    onClick={() => dispatch(increment())}
+                                >
+                                    +1
+                                </button>
+                                
+                                <button 
+                                    className="btn btn-danger btn-lg" 
+                                    onClick={() => dispatch(decrement())}
+                                >
+                                    -1
+                                </button>
+                                
+                                <button 
+                                    className="btn btn-secondary btn-lg" 
+                                    onClick={() => dispatch(reset())}
+                                >
+                                    Reset
+                                </button>
+                            </div>
+                            
+                            <div className="mt-4">
+                                <h5>How Redux Works:</h5>
+                                <ul className="text-start">
+                                    <li><strong>Actions:</strong> increment(), decrement(), reset()</li>
+                                    <li><strong>Reducer:</strong> Updates state based on action type</li>
+                                    <li><strong>Store:</strong> Holds the current count: {count}</li>
+                                    <li><strong>Component:</strong> Gets state with useSelector()</li>
+                                    <li><strong>Dispatch:</strong> Sends actions to update state</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // 5. APP with Redux Provider
+        function App() {
+            return (
+                <Provider store={store}>
+                    <Counter />
+                </Provider>
+            );
+        }
+
+        // Render the app
+        const { createRoot } = ReactDOM;
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

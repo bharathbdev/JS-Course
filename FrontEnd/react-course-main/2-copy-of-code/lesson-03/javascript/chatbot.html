@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatbot</title>
+  </head>
+  <body>
+    <div class="js-container">
+      <!-- ChatInput -->
+      <div>
+        <input 
+          id="chatInput" 
+          placeholder="Send a message to Chatbot" 
+          size="30" 
+          value="" 
+        />
+        <button id="sendButton">Send</button>
+      </div>
+      
+      <!-- Chat Messages Container -->
+      <div id="chatMessages">
+        <!-- Initial messages like React version -->
+        <div>
+          <span>hello chatbot</span>
+          <img src="user.png" width="50" />
+        </div>
+        
+        <div>
+          <img src="robot.png" width="50" />
+          <span>Hello! How can I help you?</span>
+        </div>
+        
+        <div>
+          <span>can you get me todays date?</span>
+          <img src="user.png" width="50" />
+        </div>
+        
+        <div>
+          <img src="robot.png" width="50" />
+          <span>Today is September 27</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="chatbot.js"></script>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatbot</title>
+    <style>
+      body {
+        font-family: Arial;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+
+      .send-button {
+        background-color: rgb(25, 135, 84);
+        color: white;
+        padding: 12px 20px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      .chat-input {
+        padding: 12px 15px;
+        border-radius: 10px;
+        border-width: 1px;
+        font-size: 15px;
+        flex-grow: 1;
+      }
+
+      .chat-input-container {
+        display: flex;
+        margin-bottom: 60px;
+      }
+
+      .app-container {
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-message-user {
+        display: flex;
+        justify-content: end;
+        align-items: start;
+      }
+
+      .chat-message-robot {
+        display: flex;
+        align-items: start;
+      }
+
+      .chat-message-text {
+        background-color: rgb(238, 238, 238);
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-bottom: 20px;
+        max-width: 300px;
+      }
+
+      .chat-message-profile {
+        width: 45px;
+      }
+
+      .chat-messages-container {
+        flex-grow: 1;
+        margin-top: 20px;
+        overflow: scroll;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="js-container">
+      <div class="app-container">
+        <!-- Chat Messages Container -->
+        <div class="chat-messages-container" id="chatMessages">
+          <!-- Initial messages with proper styling -->
+          <div class="chat-message-user">
+            <div class="chat-message-text">hello chatbot</div>
+            <img src="user.png" class="chat-message-profile" />
+          </div>
+          
+          <div class="chat-message-robot">
+            <img src="robot.png" class="chat-message-profile" />
+            <div class="chat-message-text">Hello! How can I help you?</div>
+          </div>
+          
+          <div class="chat-message-user">
+            <div class="chat-message-text">can you get me todays date?</div>
+            <img src="user.png" class="chat-message-profile" />
+          </div>
+          
+          <div class="chat-message-robot">
+            <img src="robot.png" class="chat-message-profile" />
+            <div class="chat-message-text">Today is September 27</div>
+          </div>
+        </div>
+        
+        <!-- ChatInput -->
+        <div class="chat-input-container">
+          <input 
+            id="chatInput" 
+            placeholder="Send a message to Chatbot" 
+            class="chat-input"
+            value="" 
+          />
+          <button id="sendButton" class="send-button">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="chatbot.js"></script>
+  </body>
+</html>

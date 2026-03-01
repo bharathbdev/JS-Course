@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML learning</title>
+</head>
+<body>
+    <h1>HTML Learnings</h1>
+
+
+        <!-- 10. Basic HTML Document Structure -->
+    <pre>
+HTML document structure:
+html
+head
+  title
+  meta
+body
+  your content here
+    </pre>
+
+    <!-- 1. Headings -->
+    <h2>This is a Heading 2</h2>
+    <p>Code: h2>Your heading h2 (You can use h2 to h6, h2 is largest after h1)</p>
+
+    <!-- 2. Block vs Inline Elements -->
+    <!-- Block Elements (Take full width) -->
+    <div>This is a DIV block element</div>
+    <div>This is another DIV block element</div>
+    <p>This is a paragraph block element</p>
+    <h3>This is heading 3 block element</h3>
+    
+    <!-- Inline Elements (Only take needed space) -->
+    <p>This paragraph has <span>inline span</span> and <strong>inline strong</strong> and <em>inline em</em> and <a href="#">inline link</a> and <code>inline code</code> and <small>inline small</small> elements.</p>
+    <p>Images are also inline: <img src="https://via.placeholder.com/50x30" alt="Small Image" width="50" height="30"> See how it flows with text!</p>
+    
+    <p>Block: div, p, h2</p>
+    <p>Inline: span, strong, em, a, code, small, img</p>
+
+    <!-- 3. Text Formatting -->
+    <p>This is a normal paragraph.</p>
+    <p><strong>This text is bold</strong></p>
+    <p><em>This text is italic</em></p>
+    <p><u>This text is underlined</u></p>
+    <p><small>This text is smaller</small></p>
+    <p><code>This is code text</code></p>
+    <br>
+    <hr>
+    <p>Code: p, strong, em, u, small, code, br, hr</p>
+
+    <!-- 4. Lists -->
+    <!-- Unordered List (Bullets) -->
+    <ul>
+        <li>Apple</li>
+        <li>Banana</li>
+        <li>Orange</li>
+    </ul>
+
+    <!-- Ordered List (Numbers) -->
+    <ol>
+        <li>First item</li>
+        <li>Second item</li>
+        <li>Third item</li>
+    </ol>
+    <p>Code: ul li and ol li</p>
+
+    <!-- 5. Links -->
+    <p><a href="https://www.google.com">Visit Google</a></p>
+    <p><a href="https://www.google.com" target="_blank">Open Google in new tab</a></p>
+    <p><a href="mailto:someone@example.com">Send Email</a></p>
+    <p>Code: a href="url"</p>
+
+    <!-- 6. Images -->
+    <img src="https://via.placeholder.com/200x100" alt="Sample Image" width="200" height="100">
+    <p>Code: img src="image.jpg" alt="description"</p>
+
+    <!-- 7. Tables -->
+    <table >
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>City</th>
+        </tr>
+        <tr>
+            <td>John</td>
+            <td>25</td>
+            <td>New York</td>
+        </tr>
+        <tr>
+            <td>Jane</td>
+            <td>30</td>
+            <td>London</td>
+        </tr>
+    </table>
+    <p>Code: table tr th td</p>
+
+    <!-- 8. Forms and Input Elements -->
+    <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name">
+        <br><br>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email">
+        <br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <br><br>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="1" max="100">
+        <br><br>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date">
+        <br><br>
+
+        <label for="file">File:</label>
+        <input type="file" id="file" name="file">
+        <br><br>
+        
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="3" cols="30" placeholder="Write your message"></textarea>
+        <br><br>
+        
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label>
+        
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label>
+        <br><br>
+        
+        <input type="checkbox" id="agree" name="agree">
+        <label for="agree">I agree to terms</label>
+
+        <input type="checkbox" id="newsletter" name="newsletter">
+        <label for="newsletter">Subscribe to newsletter</label>
+        <br><br>
+
+        <label for="country">Country:</label>
+        <select id="country" name="country">
+            <option value="usa">USA</option>
+            <option value="uk">UK</option>
+            <option value="india">India</option>
+        </select>
+        <br><br>
+        
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+        <input type="button" value="Click Me">
+    </form>
+    <p>Code: form, input, textarea, select, option, button, label</p>
+
+    <!-- 9. Comments and Special Characters -->
+    <!-- This is a comment - you won't see this on the page -->
+    <p>Comments are written like this: comment</p>
+
+
+
+    <!-- Summary -->
+    <!-- Most Important HTML Elements -->
+    <ul>
+        <li>h2 to h6 - Headings</li>
+        <li>p - Paragraphs</li>
+        <li>a - Links</li>
+        <li>img - Images</li>
+        <li>div (block) and span (inline) - Containers</li>
+        <li>ul, ol, li - Lists</li>
+        <li>table, tr, td, th - Tables</li>
+        <li>form, input, button - Forms</li>
+        <li>strong (bold), em (italic) - Text formatting</li>
+        <li>br (line break), hr (horizontal line)</li>
+    </ul>
+
+
+</body>
+</html>

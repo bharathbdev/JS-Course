@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS </title>
+    <style>
+        .example-box {
+            background-color: lightblue;
+            width: 200px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+        
+        .padding-example {
+            background-color: lightgreen;
+            padding: 20px;
+        }
+        
+        .margin-example {
+            background-color: lightcoral;
+            margin: 20px;
+        }
+        
+        .border-example {
+            background-color: lightyellow;
+            border: 3px solid red;
+        }
+        
+        .combined-example {
+            background-color: lightpink;
+            padding: 15px;
+            margin: 10px;
+            border: 2px solid blue;
+        }
+        
+        .flex-container {
+            display: flex;
+            background-color: #f0f0f0;
+            padding: 10px;
+            gap: 10px;
+        }
+        
+        .flex-item {
+            background-color: orange;
+            padding: 20px;
+            flex: 1;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            background-color: #e0e0e0;
+            padding: 10px;
+        }
+        
+        .grid-item {
+            background-color: lightsteelblue;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .text-example {
+            font-size: 20px;
+            color: blue;
+            font-weight: bold;
+        }
+        
+        .position-example {
+            position: relative;
+            left: 50px;
+            background-color: lightseagreen;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSS </h1>
+
+
+    <!-- 1. Basic CSS Syntax -->
+    <h2>Basic CSS Rule</h2>
+    <div class="example-box">This box has CSS applied</div>
+    <p>Code: .example-box { background-color: lightblue; width: 200px; height: 100px; }</p>
+
+    <!-- 2. Text Styling -->
+    <h2>Text Styling</h2>
+    <p class="text-example">This text is styled with CSS</p>
+    <p>Code: font-size: 20px; color: blue; font-weight: bold;</p>
+
+    <!-- 3. Colors and Backgrounds -->
+    <h2>Colors</h2>
+    <div style="background-color: red; color: white; padding: 10px;">Red background, white text</div>
+    <div style="background-color: #00ff00; color: black; padding: 10px;">Green background using hex</div>
+    <div style="background-color: rgb(0, 0, 255); color: white; padding: 10px;">Blue background using rgb</div>
+    <p>Code: background-color: red; color: white;</p>
+
+    <!-- 4. Box Model - Individual Properties -->
+    <h2>Box Model Parts</h2>
+    
+    <!-- Padding Example -->
+    <h3>Padding (Space inside the element)</h3>
+    <div class="padding-example">This div has padding: 20px (ALL FOUR SIDES)</div>
+    <p>Code: padding: 20px;</p>
+    
+    <!-- Different Padding Syntaxes -->
+    <h3>Different Padding Syntaxes</h3>
+    
+    <h4>1. One Value - All Sides</h4>
+    <div style="background-color: lightblue; padding: 20px; border: 2px solid blue; margin: 10px 0;">
+        padding: 20px; (20px on ALL four sides)
+    </div>
+    
+    <h4>2. Two Values - Vertical | Horizontal</h4>
+    <div style="background-color: lightgreen; padding: 10px 30px; border: 2px solid green; margin: 10px 0;">
+        padding: 10px 30px; (10px top/bottom, 30px left/right)
+    </div>
+    
+    <h4>3. Three Values - Top | Left/Right | Bottom</h4>
+    <div style="background-color: lightyellow; padding: 5px 20px 15px; border: 2px solid orange; margin: 10px 0;">
+        padding: 5px 20px 15px; (5px top, 20px left/right, 15px bottom)
+    </div>
+    
+    <h4>4. Four Values - Top Right Bottom Left (Clockwise)</h4>
+    <div style="background-color: lightpink; padding: 5px 10px 15px 25px; border: 2px solid red; margin: 10px 0;">
+        padding: 5px 10px 15px 25px; (5px top, 10px right, 15px bottom, 25px left)
+    </div>
+    
+    <h4>5. Individual Sides</h4>
+    <div style="background-color: lightcoral; padding-top: 20px; padding-right: 10px; padding-bottom: 5px; padding-left: 30px; border: 2px solid darkred; margin: 10px 0;">
+        Individual: padding-top: 20px; padding-right: 10px; padding-bottom: 5px; padding-left: 30px;
+    </div>
+    
+    <!-- Margin Example -->
+    <h3>Margin (Space outside the element)</h3>
+    <div class="margin-example">This div has margin: 20px</div>
+    <p>Code: margin: 20px;</p>
+    
+    <!-- Border Example -->
+    <h3>Border (Line around the element)</h3>
+    <div class="border-example">This div has border: 3px solid red</div>
+    <p>Code: border: 3px solid red;</p>
+
+    <!-- 5. Box Model - Combined -->
+    <h2>Combined: Padding + Margin + Border</h2>
+    <div class="combined-example">
+        This div has all three: padding, margin, and border combined
+    </div>
+    <p>Code: padding: 15px; margin: 10px; border: 2px solid blue;</p>
+
+    <!-- 6. Display Properties -->
+    <h2>Display Types</h2>
+    <div style="display: block; background-color: lightgray; padding: 10px;">Block element (takes full width)</div>
+    <span style="display: inline; background-color: yellow; padding: 10px;">Inline element</span>
+    <span style="display: inline; background-color: pink; padding: 10px;">Another inline</span>
+    <div style="display: inline-block; background-color: lightcyan; padding: 10px; width: 150px;">Inline-block element</div>
+    <p>Code: display: block; display: inline; display: inline-block;</p>
+
+    <!-- 7. Flexbox -->
+    <h2>Flexbox Layout</h2>
+    <div class="flex-container">
+        <div class="flex-item">Flex Item 1</div>
+        <div class="flex-item">Flex Item 2</div>
+        <div class="flex-item">Flex Item 3</div>
+    </div>
+    <p>Code: display: flex; gap: 10px; flex: 1;</p>
+    
+    <!-- Flexbox Direction Examples -->
+    <h3>Flex Direction</h3>
+    <div style="display: flex; flex-direction: column; gap: 5px; background-color: #f5f5f5; padding: 10px; width: 200px;">
+        <div style="background-color: lightcoral; padding: 10px;">Item 1</div>
+        <div style="background-color: lightgreen; padding: 10px;">Item 2</div>
+        <div style="background-color: lightblue; padding: 10px;">Item 3</div>
+    </div>
+    <p>Code: flex-direction: column;</p>
+
+    <!-- 8. CSS Grid -->
+    <h2>CSS Grid Layout</h2>
+    <div class="grid-container">
+        <div class="grid-item">Grid Item 1</div>
+        <div class="grid-item">Grid Item 2</div>
+        <div class="grid-item">Grid Item 3</div>
+        <div class="grid-item">Grid Item 4</div>
+        <div class="grid-item">Grid Item 5</div>
+        <div class="grid-item">Grid Item 6</div>
+    </div>
+    <p>Code: display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;</p>
+
+    <!-- 9. Positioning -->
+    <h2>Positioning</h2>
+    <div style="position: relative; background-color: #f0f0f0; height: 150px; padding: 10px;">
+        <div style="position: static; background-color: lightgray; padding: 5px;">Static (normal)</div>
+        <div class="position-example">Relative (moved 50px left)</div>
+        <div style="position: absolute; top: 10px; right: 10px; background-color: lightpink; padding: 5px;">Absolute (top-right corner)</div>
+    </div>
+    <p>Code: position: relative; left: 50px;</p>
+
+    <!-- 10. Common Layout Properties -->
+    <h2>Common Layout Properties</h2>
+    
+    <!-- Width and Height -->
+    <div style="width: 300px; height: 80px; background-color: lightsteelblue; padding: 10px;">
+        Width: 300px, Height: 80px
+    </div>
+    
+    <!-- Text Alignment -->
+    <div style="text-align: center; background-color: lightyellow; padding: 10px; margin: 10px 0;">
+        Centered Text
+    </div>
+    
+    <!-- Float (old method) -->
+    <div style="overflow: auto; background-color: #f9f9f9; padding: 10px;">
+        <div style="float: left; background-color: lightcoral; padding: 10px; margin: 5px;">Left Float</div>
+        <div style="float: right; background-color: lightgreen; padding: 10px; margin: 5px;">Right Float</div>
+    </div>
+    
+    <p>Code: width: 300px; text-align: center; float: left;</p>
+
+    <!-- 11. Responsive Units -->
+    <h2>Responsive Units</h2>
+    <div style="width: 50%; background-color: lightblue; padding: 10px;">50% width</div>
+    <div style="width: 20em; background-color: lightgreen; padding: 10px;">20em width</div>
+    <div style="width: 300px; background-color: lightcoral; padding: 10px;">300px width (fixed)</div>
+    <p>Code: width: 50%; width: 20em; width: 300px;</p>
+
+    <!-- 12. Hover and Interactive States -->
+    <h2>Interactive States</h2>
+    <div style="background-color: lightgray; padding: 20px; transition: background-color 0.3s;" 
+         onmouseover="this.style.backgroundColor='yellow'" 
+         onmouseout="this.style.backgroundColor='lightgray'">
+        Hover over me!
+    </div>
+    <p>Code: :hover { background-color: yellow; }</p>
+
+    <!-- Summary -->
+    <h2>Most Important CSS Properties</h2>
+    <ul>
+        <li><strong>Box Model:</strong> padding, margin, border</li>
+        <li><strong>Layout:</strong> display, position, float</li>
+        <li><strong>Flexbox:</strong> display: flex, flex-direction, gap</li>
+        <li><strong>Grid:</strong> display: grid, grid-template-columns</li>
+        <li><strong>Sizing:</strong> width, height</li>
+        <li><strong>Colors:</strong> color, background-color</li>
+        <li><strong>Text:</strong> font-size, font-weight, text-align</li>
+        <li><strong>Spacing:</strong> gap, justify-content, align-items</li>
+    </ul>
+
+    
+</body>
+</html>

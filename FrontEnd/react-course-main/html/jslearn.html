@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Data</title>
+</head>
+<body>
+    <h1>Users API Data</h1>
+    <div id="data"></div>
+    <button onclick="fetchData()">Fetch Data</button>
+
+    <script>
+        function fetchData() {
+        fetch('https://cors-anywhere.herokuapp.com/https://deploynodejs-mu.vercel.app/users')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('data').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                // Try alternative proxy if first fails
+                fetch('https://api.codetabs.com/v1/proxy?quest=https://deploynodejs-mu.vercel.app/users')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('data').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    })
+                    .catch(err => {
+                        document.getElementById('data').innerHTML = '<p>CORS Error. Try opening this in a local server or use a browser extension to disable CORS.</p>';
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

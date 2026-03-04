@@ -1,82 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>Chatbot</title>
-    <style>
-      body {
-        font-family: Arial;
-        margin-top: 0px;
-        margin-bottom: 0px;
-      }
-
-      .send-button {
-        background-color: rgb(25, 135, 84);
-        color: white;
-        padding: 12px 20px;
-        margin-left: 10px;
-        border: none;
-        border-radius: 10px;
-        font-size: 15px;
-        cursor: pointer;
-      }
-
-      .chat-input {
-        padding: 12px 15px;
-        border-radius: 10px;
-        border-width: 1px;
-        font-size: 15px;
-
-        flex-grow: 1;
-      }
-
-      .chat-input-container {
-        display: flex;
-        margin-bottom: 60px;
-      }
-
-      .app-container {
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .chat-message-user {
-        display: flex;
-        justify-content: end;
-        align-items: start;
-      }
-
-      .chat-message-robot {
-        display: flex;
-        align-items: start;
-      }
-
-      .chat-message-text {
-        background-color: rgb(238, 238, 238);
-        padding: 15px 20px;
-        border-radius: 10px;
-        margin-right: 10px;
-        margin-left: 10px;
-        margin-bottom: 20px;
-        max-width: 300px;
-      }
-
-      .chat-message-profile {
-        width: 45px;
-      }
-
-      .chat-messages-container {
-        flex-grow: 1;
-        margin-top: 20px;
-        overflow: scroll;
-        scrollbar-width: none;
-
-      }
-    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="js-container"></div>
@@ -89,7 +18,7 @@
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
       function ChatInput({ chatMessages, setChatMessages }) {
-        const [inputText, setInputText] = React.useState('');
+        const [inputText, setInputText] = React.useState("");
 
         function saveInputText(event) {
           setInputText(event.target.value);
@@ -100,9 +29,9 @@
             ...chatMessages,
             {
               message: inputText,
-              sender: 'user',
-              id: crypto.randomUUID()
-            }
+              sender: "user",
+              id: crypto.randomUUID(),
+            },
           ];
 
           setChatMessages(newChatMessages);
@@ -112,46 +41,53 @@
             ...newChatMessages,
             {
               message: response,
-              sender: 'robot',
-              id: crypto.randomUUID()
-            }
+              sender: "robot",
+              id: crypto.randomUUID(),
+            },
           ]);
 
-          setInputText('');
+          setInputText("");
         }
 
         return (
-          <div className="chat-input-container">
+          <div className="d-flex mb-5">
             <input
               placeholder="Send a message to Chatbot"
               size="30"
               onChange={saveInputText}
               value={inputText}
-              className="chat-input"
+              className="form-control rounded-3 me-2"
             />
             <button
               onClick={sendMessage}
-              className="send-button"
-            >Send</button>
+              className="btn btn-success px-3 rounded-3"
+            >
+              Send
+            </button>
           </div>
         );
       }
 
       function ChatMessage({ message, sender }) {
         return (
-          <div className={
-            sender === 'user'
-              ? 'chat-message-user'
-              : 'chat-message-robot'
-          }>
-            {sender === 'robot' && (
-              <img src="robot.png" className="chat-message-profile" />
+          <div
+            className={
+              sender === "user"
+                ? "d-flex justify-content-end align-items-start"
+                : "d-flex align-items-start"
+            }
+          >
+            {sender === "robot" && (
+              <img src="robot.png" style={{ width: "45px" }} />
             )}
-            <div className="chat-message-text">
+            <div
+              className="bg-light p-3 rounded-3 mx-2 mb-3"
+              style={{ maxWidth: "300px" }}
+            >
               {message}
             </div>
-            {sender === 'user' && (
-              <img src="user.png" className="chat-message-profile" />
+            {sender === "user" && (
+              <img src="user.png" style={{ width: "45px" }} />
             )}
           </div>
         );
@@ -159,7 +95,10 @@
 
       function ChatMessages({ chatMessages }) {
         return (
-          <div className="chat-messages-container">
+          <div
+            className="flex-grow-1 mt-3 overflow-auto"
+            style={{ scrollbarWidth: "none" }}
+          >
             {chatMessages.map((chatMessage) => {
               return (
                 <ChatMessage
@@ -174,32 +113,21 @@
       }
 
       function App() {
-        const [chatMessages, setChatMessages] = React.useState([{
-          message: 'hello chatbot',
-          sender: 'user',
-          id: 'id1'
-        }, {
-          message: 'Hello! How can I help you?',
-          sender: 'robot',
-          id: 'id2'
-        }, {
-          message: 'can you get me todays date?',
-          sender: 'user',
-          id: 'id3'
-        }, {
-          message: 'Today is September 27',
-          sender: 'robot',
-          id: 'id4'
-        }]);
-        // const [chatMessages, setChatMessages] = array;
-        // const chatMessages = array[0];
-        // const setChatMessages = array[1];
+        const [chatMessages, setChatMessages] = React.useState([
+          {
+            message: "hello chatbot",
+            sender: "user",
+            id: "id1",
+          }
+        ]);
+
 
         return (
-          <div className="app-container">
-            <ChatMessages
-              chatMessages={chatMessages}
-            />
+          <div
+            className="container-fluid d-flex flex-column"
+            style={{ maxWidth: "600px", height: "100vh" }}
+          >
+            <ChatMessages chatMessages={chatMessages} />
             <ChatInput
               chatMessages={chatMessages}
               setChatMessages={setChatMessages}
@@ -208,7 +136,7 @@
         );
       }
 
-      const container = document.querySelector('.js-container');
+      const container = document.querySelector(".js-container");
       ReactDOM.createRoot(container).render(<App />);
     </script>
   </body>

@@ -68,6 +68,7 @@ app.post('/signin', async (req, res) => {
 
     res.json({ 
         message: 'Sign in successful', 
+        username: user?.username,
         token
     });
 });
@@ -77,7 +78,7 @@ app.post('/signin', async (req, res) => {
 // Protected test endpoint
 app.get('/protected', authenticateToken, (req, res) => {
     res.json({ 
-        message: 'This is a protected route'
+        message: 'This is a dashboard data it will big in real time'
     });
 });
 

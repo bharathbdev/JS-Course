@@ -1,292 +1,269 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo 4: Complete App with useContext</title>
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo 3: useState + useEffect + Router</title>
+
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
     <!-- React, ReactDOM, React Router and Babel -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-router-dom@5.3.4/umd/react-router-dom.min.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-router-dom@5.3.4/umd/react-router-dom.min.js"
+    ></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useContext, createContext } = React;
-        const { BrowserRouter, Switch, Route, Link, useHistory, Redirect } = ReactRouterDOM;
+      const { useState, useEffect } = React;
+      const { BrowserRouter, Switch, Route, Link, useHistory } = ReactRouterDOM;
 
-        // NEW: Auth Context (Global State Management)
-        const AuthContext = createContext();
+      // Registration Component (All Previous Code from Demo 2)
+      function RegisterPage() {
+        const [name, setName] = useState("");
+        const [age, setAge] = useState("");
+        const [password, setPassword] = useState("");
+        const [message, setMessage] = useState("");
 
-        // NEW: Auth Provider Component
-        function AuthProvider({ children }) {
-            const [user, setUser] = useState(null);
-            const [isLoggedIn, setIsLoggedIn] = useState(false);
+        const handleSubmit = (e) => {
+          e.preventDefault();
 
-            const login = (userData) => {
-                setUser(userData);
-                setIsLoggedIn(true);
-            };
+          fetch("http://localhost:3000/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: name,
+              password: password,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setMessage("Success: " + data.message);
+              // Clear form
+              setName("");
+              setAge("");
+              setPassword("");
+            })
+            .catch((error) => {
+              setMessage("Error: Something went wrong");
+            });
+        };
 
-            const logout = () => {
-                setUser(null);
-                setIsLoggedIn(false);
-            };
+        return (
+          <div className="container mt-5">
+            <div className="card">
+              <div className="card-header">
+                <h3>Register Page</h3>
+              </div>
+              <div className="card-body">
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label>Name:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
 
-            return (
-                <AuthContext.Provider value={{ user, isLoggedIn, login, logout }}>
-                    {children}
-                </AuthContext.Provider>
-            );
-        }
+                  <div className="mb-3">
+                    <label>Age:</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={age}
+                      onChange={(e) => setAge(e.target.value)}
+                    />
+                  </div>
 
-        // Registration Component (All Previous Code from Demo 3)
-        function RegisterPage() {
-            const [name, setName] = useState('');
-            const [age, setAge] = useState('');
-            const [password, setPassword] = useState('');
-            const [message, setMessage] = useState('');
+                  <div className="mb-3">
+                    <label>Password:</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
 
-            const handleSubmit = async (e) => {
-                e.preventDefault();
+                  <button type="submit" className="btn btn-primary">
+                    Register
+                  </button>
+                </form>
 
-                try {
-                    const response = await fetch('./api-data.json');
-                    const data = await response.json();
-                    
-                    setMessage('User registered successfully! You can now sign in.');
-                    setName('');
-                    setAge('');
-                    setPassword('');
-                } catch (error) {
-                    setMessage('Failed to register user');
-                }
-            };
+                {message && (
+                  <div className="alert alert-info mt-3">{message}</div>
+                )}
 
-            return (
-                <div className="container mt-5">
-                    <div className="card">
-                        <div className="card-header">
-                            <h3>Register Page</h3>
-                        </div>
-                        <div className="card-body">
-                            <form onSubmit={handleSubmit}>
-                                <div className="mb-3">
-                                    <label>Name:</label>
-                                    <input 
-                                        type="text" 
-                                        className="form-control"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                    />
-                                </div>
-                                
-                                <div className="mb-3">
-                                    <label>Age:</label>
-                                    <input 
-                                        type="number" 
-                                        className="form-control"
-                                        value={age}
-                                        onChange={(e) => setAge(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label>Password:</label>
-                                    <input 
-                                        type="password" 
-                                        className="form-control"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                </div>
-
-                                <button type="submit" className="btn btn-primary">
-                                    Register
-                                </button>
-                            </form>
-
-                            {message && (
-                                <div className="alert alert-info mt-3">
-                                    {message}
-                                </div>
-                            )}
-
-                            <div className="mt-3">
-                                <p>Already have account?</p>
-                                <Link to="/signin" className="btn btn-outline-success">
-                                    Sign In
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
+                <div className="mt-3">
+                  <p>Already have account?</p>
+                  <Link to="/signin" className="btn btn-outline-success">
+                    Sign In
+                  </Link>
                 </div>
-            );
-        }
+              </div>
+            </div>
+          </div>
+        );
+      }
 
-        // UPDATED: Sign In Component with Context Integration
-        function SignInPage() {
-            const [name, setName] = useState('');
-            const [password, setPassword] = useState('');
-            const [message, setMessage] = useState('');
-            const { login } = useContext(AuthContext);
-            const history = useHistory();
+      // NEW: Sign In Component
+      function SignInPage() {
+        const [name, setName] = useState("");
+        const [password, setPassword] = useState("");
+        const [message, setMessage] = useState("");
+        const history = useHistory();
 
-            const handleSignIn = async (e) => {
-                e.preventDefault();
-                
-                try {
-                    const response = await fetch('./api-data.json');
-                    const data = await response.json();
-                    
-                    if (name && password) {
-                        login({ name: name });
-                        history.push('/dashboard');
-                    } else {
-                        setMessage('Please enter name and password');
-                    }
-                } catch (error) {
-                    setMessage('Login failed');
-                }
-            };
+        const handleSignIn = (e) => {
+          e.preventDefault();
 
-            return (
-                <div className="container mt-5">
-                    <div className="card">
-                        <div className="card-header">
-                            <h3>Sign In Page</h3>
-                        </div>
-                        <div className="card-body">
-                            <form onSubmit={handleSignIn}>
-                                <div className="mb-3">
-                                    <label>Name:</label>
-                                    <input 
-                                        type="text" 
-                                        className="form-control"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                    />
-                                </div>
+          fetch("http://localhost:3000/signin", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: name,
+              password: password,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setName("");
+              setPassword("");
 
-                                <div className="mb-3">
-                                    <label>Password:</label>
-                                    <input 
-                                        type="password" 
-                                        className="form-control"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                </div>
+              if (data.message === "Invalid credentials") {
+                setMessage("Sign in failed");
+                return;
+              }
+              history.push("/dashboard");
+            })
+            .catch((error) => {
+              setMessage("Sign in failed");
+            });
+        };
 
-                                <button type="submit" className="btn btn-success">
-                                    Sign In
-                                </button>
-                            </form>
+        return (
+          <div className="container mt-5">
+            <div className="card">
+              <div className="card-header">
+                <h3>Sign In Page</h3>
+              </div>
+              <div className="card-body">
+                <form onSubmit={handleSignIn}>
+                  <div className="mb-3">
+                    <label>Name:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
 
-                            {message && (
-                                <div className="alert alert-info mt-3">
-                                    {message}
-                                </div>
-                            )}
+                  <div className="mb-3">
+                    <label>Password:</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
 
-                            <div className="mt-3">
-                                <p>Don't have account?</p>
-                                <Link to="/register" className="btn btn-outline-primary">
-                                    Register
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
+                  <button type="submit" className="btn btn-success">
+                    Sign In
+                  </button>
+                </form>
+
+                {message && (
+                  <div className="alert alert-info mt-3">{message}</div>
+                )}
+
+                <div className="mt-3">
+                  <p>Don't have account?</p>
+                  <Link to="/register" className="btn btn-outline-primary">
+                    Register
+                  </Link>
                 </div>
-            );
-        }
+              </div>
+            </div>
+          </div>
+        );
+      }
 
-        // NEW: Dashboard Component
-        function Dashboard() {
-            const { user } = useContext(AuthContext);
+      // Dashboard Component
+      function DashboardPage() {
+        return (
+          <div className="container mt-5">
+            <div className="card">
+              <div className="card-header">
+                <h3>Dashboard</h3>
+              </div>
+              <div className="card-body">
+                <p>Welcome! You are now signed in.</p>
+              </div>
+            </div>
+          </div>
+        );
+      }
 
-            return (
-                <div className="container mt-5">
-                    <div className="card">
-                        <div className="card-header">
-                            <h2>Dashboard</h2>
-                        </div>
-                        <div className="card-body text-center">
-                            <h1>Hello {user?.name}</h1>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
+      // Navigation Component
+      function Navigation() {
+        return (
+          <nav className="navbar navbar-dark bg-dark">
+            <div className="container">
+              <span className="navbar-brand">Demo 3: Router</span>
+              <div>
+                <Link className="btn btn-outline-light me-2" to="/register">
+                  Register
+                </Link>
+                <Link className="btn btn-outline-light" to="/signin">
+                  Sign In
+                </Link>
+              </div>
+            </div>
+          </nav>
+        );
+      }
 
-        // UPDATED: Navigation Component with Auth Status
-        function Navigation() {
-            const { isLoggedIn, user, logout } = useContext(AuthContext);
-            const history = useHistory();
-            
-            const handleLogout = () => {
-                logout();
-                history.push('/signin');
-            };
-            
-            return (
-                <nav className="navbar navbar-dark bg-dark">
-                    <div className="container">
-                        <span className="navbar-brand">Demo 4: Complete App</span>
-                        
-                        <div className="d-flex align-items-center">
-                            <div className={`badge ${isLoggedIn ? 'bg-success' : 'bg-danger'} me-3`}>
-                                {isLoggedIn ? `🟢 Logged In as ${user?.name}` : '🔴 Not Logged In'}
-                            </div>
-                            
-                            <div>
-                                {!isLoggedIn ? (
-                                    <>
-                                        <Link className="btn btn-outline-light me-2" to="/register">Register</Link>
-                                        <Link className="btn btn-outline-light" to="/signin">Sign In</Link>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Link className="btn btn-outline-light me-2" to="/dashboard">Dashboard</Link>
-                                        <button className="btn btn-outline-light" onClick={handleLogout}>
-                                            Logout
-                                        </button>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-            );
-        }
+      // Main App Component with Router
+      function App() {
+        return (
+          <BrowserRouter>
+            <Navigation />
+            <Switch>
+              <Route exact path="/" component={RegisterPage} />
+              <Route exact path="/register" component={RegisterPage} />
+              <Route exact path="/signin" component={SignInPage} />
+              <Route exact path="/dashboard" component={DashboardPage} />
+            </Switch>
+          </BrowserRouter>
+        );
+      }
 
-        // UPDATED: Main App Component with All Features
-        function App() {
-            return (
-                <BrowserRouter>
-                    <AuthProvider>
-                        <Navigation />
-                        <Switch>
-                            <Route exact path="/" component={RegisterPage} />
-                            <Route exact path="/register" component={RegisterPage} />
-                            <Route exact path="/signin" component={SignInPage} />
-                            <Route exact path="/dashboard" component={Dashboard} />
-                        </Switch>
-                    </AuthProvider>
-                </BrowserRouter>
-            );
-        }
-
-        // Render the app using React 18 createRoot
-        const { createRoot } = ReactDOM;
-        const root = createRoot(document.getElementById('root'));
-        root.render(<App />);
+      // Render the app using React 18 createRoot
+      const { createRoot } = ReactDOM;
+      const root = createRoot(document.getElementById("root"));
+      root.render(<App />);
     </script>
-</body>
+  </body>
 </html>

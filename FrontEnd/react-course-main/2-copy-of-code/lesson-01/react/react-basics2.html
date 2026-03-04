@@ -11,31 +11,47 @@
 
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
-      function App() {
-        const [inputValue, setInputValue] = React.useState("");
+      // --- Component composition example ---
+      function Car() {
+        return <h2>I am a Car!</h2>;
+      }
 
-        function handleInput(event) {
-          setInputValue(event.target.value);
-        }
 
+
+
+
+      function Garage() {
         return (
-          <div>
-           
-            <input value={inputValue} onChange={handleInput} />
-
-       
-            <input
-              value={inputValue}
-              onChange={(event) => setInputValue(event.target.value)}
-            />
-
-            <p>{inputValue}</p>
-          </div>
+          <>
+            <h1>Who lives in my Garage?</h1>
+            <Car />
+          </>
         );
       }
 
+
+
+
+
+      // --- Props example ---
+      function CarWithProps(props) {
+        return (
+          <h2>
+            I am a {props.brand} - {props.model}!
+          </h2>
+        );
+      }
+
+
+
+
+      
       const container = document.querySelector(".js-container");
-      ReactDOM.createRoot(container).render(<App />);
+      ReactDOM.createRoot(container).render(<Car />);
+      //  ReactDOM.createRoot(container).render(<Garage />);
+      //   ReactDOM.createRoot(container).render(
+      //     <CarWithProps brand="Ford" model="Mustang" />,
+      //   );
     </script>
   </body>
 </html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+  <head>
+    <title>React Basics</title>
+  </head>
+  <body>
+    <div class="js-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+   
+
+      // Example 1: color state
+      function ColorApp() {
+        const [color, setColor] = React.useState("red");
+
+        function updateColor() {
+          setColor("green");
+        }
+
+        return (
+          <>
+            <h1>My favorite color is {color}!</h1>
+
+            <button type="button" onClick={updateColor}>
+              green
+            </button>
+
+            <button type="button" onClick={() => setColor("blue")}>
+              Blue
+            </button>
+          </>
+        );
+      }
+
+      // Example 2: object state
+      function CarApp() {
+        const [car, setCar] = React.useState({
+          brand: "Ford",
+          model: "Mustang",
+          year: "1964",
+          color: "red",
+        });
+
+        function updateColor() {
+          setCar((prev) => ({ ...prev, color: "blue" }));
+        }
+
+        return (
+          <>
+            <p>
+              It is a {car.brand} {car.color} {car.model} from {car.year}.
+            </p>
+            <button type="button" onClick={updateColor}>
+              Update Color to Blue
+            </button>
+          </>
+        );
+      }
+
+      const container = document.querySelector(".js-container");
+         ReactDOM.createRoot(container).render(<ColorApp />);
+      //   ReactDOM.createRoot(container).render(<CarApp />);
+    </script>
+  </body>
+</html>

@@ -1,3 +1,4 @@
 
 // Calculate and display the result (2 + 2)
 document.getElementById('calculation').textContent = 2 + 2;
+document.querySelector('.myclass').textContent = 2 * 2;

@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <title>React Basics</title>
+  </head>
+  <body>
+    <div class="js-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+      function App() {
+        const [inputValue, setInputValue] = React.useState("");
+
+        function handleInput(event) {
+          setInputValue(event.target.value);
+        }
+
+        return (
+          <div>
+           
+            <input value={inputValue} onChange={handleInput} />
+
+       
+            <input
+              value={inputValue}
+              onChange={(event) => setInputValue(event.target.value)}
+            />
+
+            <p>{inputValue}</p>
+          </div>
+        );
+      }
+
+      const container = document.querySelector(".js-container");
+      ReactDOM.createRoot(container).render(<App />);
+    </script>
+  </body>
+</html>

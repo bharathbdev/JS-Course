@@ -11,11 +11,15 @@
 
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
+      let name = "John";
       const div = (
         <div>
+          
           <button>hello</button>
           <p>{2 + 2}</p>
           <p>{2 + 2}</p>
+          {name}
+          {name === "John" ? <p>Welcome, John!</p> : <p>Please log in.</p>}
         </div>
       );
 

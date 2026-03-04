@@ -1,20 +1,31 @@
 
 // Calculate and display the result (2 + 2)
-document.getElementById('calculation').textContent = 2 + 2;
-document.querySelector('.myclass').textContent = 2 * 2;
+// document.getElementById('calculation').textContent = 2 + 2;
+// document.querySelector('.myclass').textContent = 2 * 2;
 
-function sumbitme() {
-  alert('Button clicked!');
-}
+// function sumbitme() {
+//   alert('Button clicked!');
+// }
 
-document.querySelector('button').addEventListener('click', sumbitme);
+// document.querySelector('button').addEventListener('click', sumbitme);
 
 
 
- const div = document.createElement('div');
- const img = document.createElement('img');
-    img.src = 'robot.png';
-    img.width = 50;
-    div.appendChild(img);
-    document.getElementById('imghere').appendChild(div);
+//  const div = document.createElement('div');
+//  const img = document.createElement('img');
+//     img.src = 'robot.png';
+//     img.width = 50;
+//     div.appendChild(img);
+//     document.getElementById('imghere').appendChild(div);
+
+
+
+  
+  document.getElementById('myInput').oninput = function() {
+    let display = this.value;
+    console.log(display);
+    document.getElementById('inputDisplay').textContent = display;
+  };
+  
+
 

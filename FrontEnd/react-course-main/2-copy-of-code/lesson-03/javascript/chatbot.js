@@ -30,18 +30,19 @@ let chatMessages = [{
 
 let inputText = '';
 
-// ChatInput functionality - matches React version with styled elements
+// ChatInput functionality - matches React version
 function ChatInput() {
   const input = document.getElementById('chatInput');
   const button = document.getElementById('sendButton');
   
+  // saveInputText equivalent to onChange in React
   function saveInputText(event) {
     inputText = event.target.value;
   }
   
+  // sendMessage equivalent to onClick in React
   function sendMessage() {
-    if (inputText.trim() === '') return;
-    
+    // Add user message
     const newChatMessages = [
       ...chatMessages,
       {
@@ -53,6 +54,7 @@ function ChatInput() {
     
     chatMessages = newChatMessages;
     
+    // Get robot response
     const response = Chatbot.getResponse(inputText);
     chatMessages = [
       ...newChatMessages,
@@ -63,55 +65,51 @@ function ChatInput() {
       }
     ];
     
+    // Clear input like setInputText('') in React
     inputText = '';
     input.value = '';
-    
+    console.log('new data', chatMessages);
+    // Update display
     ChatMessages();
   }
   
+  // Set up event listeners
   input.addEventListener('input', saveInputText);
   button.addEventListener('click', sendMessage);
-  
-  // Handle Enter key
-  input.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-      sendMessage();
-    }
-  });
 }
 
-// ChatMessage functionality - matches React version with proper CSS classes
+// ChatMessage functionality - matches React version
 function ChatMessage(message, sender) {
   const div = document.createElement('div');
-  div.className = sender === 'user' ? 'chat-message-user' : 'chat-message-robot';
   
   if (sender === 'robot') {
     const img = document.createElement('img');
     img.src = 'robot.png';
-    img.className = 'chat-message-profile';
+    img.width = 50;
     div.appendChild(img);
   }
   
-  const textDiv = document.createElement('div');
-  textDiv.className = 'chat-message-text';
-  textDiv.textContent = message;
-  div.appendChild(textDiv);
+  const span = document.createElement('span');
+  span.textContent = message;
+  div.appendChild(span);
   
   if (sender === 'user') {
     const img = document.createElement('img');
     img.src = 'user.png';
-    img.className = 'chat-message-profile';
+    img.width = 50;
     div.appendChild(img);
   }
   
   return div;
 }
 
-// ChatMessages functionality - matches React version with auto-scroll
+// ChatMessages functionality - matches React version
 function ChatMessages() {
   const container = document.getElementById('chatMessages');
+  // Clear existing messages
   container.innerHTML = '';
   
+  // Add all messages from state
   chatMessages.forEach((chatMessage) => {
     const messageElement = ChatMessage(chatMessage.message, chatMessage.sender);
     container.appendChild(messageElement);
@@ -120,9 +118,10 @@ function ChatMessages() {
 
 // App functionality - matches React version structure
 function App() {
+  // Initialize like React version
   ChatInput();
   ChatMessages();
-  console.log('Advanced Chatbot App initialized with full styling');
+  console.log('Chatbot App initialized with working functionality');
 }
 
 // Initialize the app when DOM is loaded

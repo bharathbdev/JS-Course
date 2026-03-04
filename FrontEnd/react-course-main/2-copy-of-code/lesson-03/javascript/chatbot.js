@@ -1,25 +1,5 @@
-// Chatbot library equivalent - matches React version functionality
-const Chatbot = {
-  getResponse: function(inputText) {
-    // Simple responses like the supersimpledev chatbot library would provide
-    const responses = {
-      'hello': 'Hello! How can I help you?',
-      'hi': 'Hello! How can I help you?',
-      'date': 'Today is September 27',
-      'time': 'The current time is 3:30 PM',
-      'weather': 'It\'s sunny today!',
-      'how are you': 'I\'m doing great, thank you for asking!'
-    };
-    
-    const lowerInput = inputText.toLowerCase();
-    for (let key in responses) {
-      if (lowerInput.includes(key)) {
-        return responses[key];
-      }
-    }
-    return 'I\'m not sure how to respond to that. Can you try asking something else?';
-  }
-};
+// Chatbot library from supersimpledev - loaded externally
+// Now using: const response = Chatbot.getResponse(inputText);
 
 // State management like React useState
 let chatMessages = [{

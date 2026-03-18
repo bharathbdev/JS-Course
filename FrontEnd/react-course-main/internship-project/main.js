@@ -1,3 +1,6 @@
+// Prevent vertical scroll bar
+document.body.style.overflowY = 'hidden';
+document.documentElement.style.overflowY = 'hidden';
 const { useState, useEffect } = React;
 
 // --- Modern Navbar ---
@@ -24,7 +27,7 @@ function Navbar({ page, setPage }) {
 // --- Hero Section with Responsive Carousel ---
 function HeroSection() {
   return (
-    <section className="hero-section text-center animate__animated animate__fadeInDown" style={{padding:'0',marginBottom:'0'}}>
+    <section className="hero-section text-center animate__animated animate__fadeInDown" style={{padding:'0',marginBottom:'0',marginTop:'72px'}}>
       <div className="container-fluid p-0">
         <div id="heroCarousel" className="carousel slide mb-0" data-bs-ride="carousel">
           <div className="carousel-inner">
@@ -47,9 +50,9 @@ function HeroSection() {
             <span className="visually-hidden">Next</span>
           </button>
         </div>
-        <div className="py-5">
-          <h1 className="display-4 fw-bold mb-3 text-primary">Smart Rent Management</h1>
-          <p className="lead mb-4 text-dark">Efficiently manage tenants, track rent, and automate reminders.<br/>Modern, simple, and powerful.</p>
+        <div className="py-2">
+          <h1 className="display-4 fw-bold mb-2 text-primary">Smart Rent Management</h1>
+          <p className="lead mb-2 text-dark">Efficiently manage tenants, track rent, and automate reminders.<br/>Modern, simple, and powerful.</p>
         </div>
       </div>
     </section>
@@ -973,7 +976,7 @@ function TenantRegistration({ data, setData }) {
 // --- Modern Footer ---
 function Footer() {
   return (
-    <footer className="bg-dark text-white" style={{position:'fixed', bottom:0, left:0, width:'100vw', height:'56px', display:'flex', alignItems:'center', zIndex:1001, boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)'}}>
+    <footer className="bg-dark text-white" style={{position:'fixed', bottom:0, left:0, width:'100vw', height:'56px', display:'flex', alignItems:'center', zIndex:1001, boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)', marginTop:'24px'}}>
       <div className="container text-center" style={{width:'100%'}}>
         <div className="d-flex justify-content-center align-items-center" style={{height:'56px'}}>
           <img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt="Logo" style={{width:32,height:32,borderRadius:'50%',marginRight:8}} />
@@ -1062,7 +1065,7 @@ function App() {
   // Modal for Owner Login
   function OwnerLoginModal() {
     return (
-      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)', marginTop:'48px'}}>
         <div className="modal-dialog" style={{maxWidth:520}}>
           <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
             <div className="modal-header">
@@ -1083,7 +1086,7 @@ function App() {
   // Modal for Owner Registration
   function OwnerRegModal() {
     return (
-      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)', marginTop:'48px'}}>
         <div className="modal-dialog" style={{maxWidth:520}}>
           <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
             <div className="modal-header">
@@ -1104,7 +1107,7 @@ function App() {
   // Modal for Tenant Login
   function TenantLoginModal() {
     return (
-      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)', marginTop:'48px'}}>
         <div className="modal-dialog" style={{maxWidth:520}}>
           <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
             <div className="modal-header">
@@ -1125,7 +1128,7 @@ function App() {
   // Modal for Tenant Registration
   function TenantRegModal() {
     return (
-      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)', marginTop:'48px'}}>
         <div className="modal-dialog" style={{maxWidth:520}}>
           <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
             <div className="modal-header">
@@ -1148,10 +1151,10 @@ function App() {
     <>
       <Navbar page={page} setPage={setPage} />
       {page === 'home' && <HeroSection />}
-      <div className="container">
+      <div className="container" style={{overflow:'hidden'}}>
         {page === 'home' && (
           <>
-            <ul className="nav nav-tabs mb-4 justify-content-center">
+            <ul className="nav nav-tabs mb-2 justify-content-center">
               <li className="nav-item">
                 <a className="nav-link" href="#" onClick={() => setShowOwnerLogin(true)}>Owner Login</a>
               </li>

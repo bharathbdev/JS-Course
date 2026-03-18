@@ -973,13 +973,13 @@ function TenantRegistration({ data, setData }) {
 // --- Modern Footer ---
 function Footer() {
   return (
-    <footer className="bg-dark text-white py-4 mt-5">
-      <div className="container text-center">
-        <div className="mb-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt="Logo" style={{width:40,height:40,borderRadius:'50%',marginRight:8}} />
+    <footer className="bg-dark text-white" style={{position:'fixed', bottom:0, left:0, width:'100vw', height:'56px', display:'flex', alignItems:'center', zIndex:1001, boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)'}}>
+      <div className="container text-center" style={{width:'100%'}}>
+        <div className="d-flex justify-content-center align-items-center" style={{height:'56px'}}>
+          <img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt="Logo" style={{width:32,height:32,borderRadius:'50%',marginRight:8}} />
           <span className="fw-bold">Smart Rent Management</span>
+          <small className="ms-3">&copy; {new Date().getFullYear()} All rights reserved. Made with <span style={{color:'#f87171'}}>❤</span> for modern web.</small>
         </div>
-        <small>&copy; {new Date().getFullYear()} All rights reserved. Made with <span style={{color:'#f87171'}}>❤</span> for modern web.</small>
       </div>
     </footer>
   );

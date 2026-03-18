@@ -429,9 +429,12 @@ function TenantDashboard() {
 }
 
 // --- Single Registration/Login Page ---
-function RegistrationLogin({ onOwnerLogin }) {
+function RegistrationLogin(props) {
+  const { onOwnerLogin, showLoginOnly = false, showRegisterOnly = false } = props;
+  // Do not assign to showLoginOnly/showRegisterOnly, just use destructured values
   const [data, setData] = useState(loadData());
-  const [isOwnerReg, setIsOwnerReg] = useState(true);
+  // If showLoginOnly/showRegisterOnly, force form mode
+  const [isOwnerReg, setIsOwnerReg] = useState(showRegisterOnly ? true : false);
   // Owner registration
   const [ownerName, setOwnerName] = useState('');
   const [ownerEmail, setOwnerEmail] = useState('');
@@ -481,6 +484,51 @@ function RegistrationLogin({ onOwnerLogin }) {
     }
   }
 
+  // Only show one form if showLoginOnly or showRegisterOnly is set
+  if (showLoginOnly) {
+    return (
+      <div className="glass my-4 animate__animated animate__fadeInUp" style={{maxWidth: 420, margin: '0 auto'}}>
+        <h2 className="mb-3 text-center text-primary"><i className="bi bi-person-badge"></i> Owner Login</h2>
+        <form onSubmit={handleOwnerLogin}>
+          <div className="mb-3">
+            <label className="form-label">Email</label>
+            <input type="email" className="form-control" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} required />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Password</label>
+            <input type="password" className="form-control" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} required />
+          </div>
+          {loginError && <div className="alert alert-danger py-1">{loginError}</div>}
+          <button className="btn btn-primary w-100" type="submit">Login</button>
+        </form>
+      </div>
+    );
+  }
+  if (showRegisterOnly) {
+    return (
+      <div className="glass my-4 animate__animated animate__fadeInUp" style={{maxWidth: 420, margin: '0 auto'}}>
+        <h2 className="mb-3 text-center text-success"><i className="bi bi-person-badge"></i> Owner Registration</h2>
+        <form onSubmit={handleOwnerRegister}>
+          <div className="mb-3">
+            <label className="form-label">Name</label>
+            <input type="text" className="form-control" value={ownerName} onChange={e => setOwnerName(e.target.value)} required />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Email</label>
+            <input type="email" className="form-control" value={ownerEmail} onChange={e => setOwnerEmail(e.target.value)} required />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Password</label>
+            <input type="password" className="form-control" value={ownerPassword} onChange={e => setOwnerPassword(e.target.value)} required />
+          </div>
+          {ownerError && <div className="alert alert-danger py-1">{ownerError}</div>}
+          {ownerSuccess && <div className="alert alert-success py-1">{ownerSuccess}</div>}
+          <button className="btn btn-success w-100" type="submit">Register</button>
+        </form>
+      </div>
+    );
+  }
+  // Default: show tabs for switching
   return (
     <div className="glass my-4 animate__animated animate__fadeInUp" style={{maxWidth: 420, margin: '0 auto'}}>
       <h2 className="mb-3 text-center"><i className="bi bi-person-badge"></i> {isOwnerReg ? 'Owner Registration' : 'Owner Login'}</h2>
@@ -1073,7 +1121,8 @@ function App() {
               <button type="button" className="btn-close" onClick={() => setShowOwnerLogin(false)}></button>
             </div>
             <div className="modal-body">
-              <RegistrationLogin onOwnerLogin={handleOwnerLogin} showLoginOnly />
+              {/* Only show Owner Login form */}
+              <RegistrationLogin onOwnerLogin={handleOwnerLogin} showLoginOnly={true} />
             </div>
             <div className="modal-footer">
               <button className="btn btn-secondary w-100" onClick={() => setShowOwnerLogin(false)}>Cancel</button>
@@ -1094,7 +1143,8 @@ function App() {
               <button type="button" className="btn-close" onClick={() => setShowOwnerReg(false)}></button>
             </div>
             <div className="modal-body">
-              <RegistrationLogin onOwnerLogin={handleOwnerLogin} showRegisterOnly />
+              {/* Only show Owner Registration form */}
+              <RegistrationLogin onOwnerLogin={handleOwnerLogin} showRegisterOnly={true} />
             </div>
             <div className="modal-footer">
               <button className="btn btn-secondary w-100" onClick={() => setShowOwnerReg(false)}>Cancel</button>

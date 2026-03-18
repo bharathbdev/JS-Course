@@ -1040,6 +1040,8 @@ function App() {
   const [page, setPage] = useState('home'); // home, owner, tenant, tenantReg, about, features, contact
   const [showOwnerLogin, setShowOwnerLogin] = useState(false);
   const [showOwnerReg, setShowOwnerReg] = useState(false);
+  const [showTenantLogin, setShowTenantLogin] = useState(false);
+  const [showTenantReg, setShowTenantReg] = useState(false);
 
   useEffect(() => { saveData(data); }, [data]);
 
@@ -1049,6 +1051,8 @@ function App() {
     setPage('owner');
     setShowOwnerLogin(false);
     setShowOwnerReg(false);
+    setShowTenantLogin(false);
+    setShowTenantReg(false);
   }
   function handleLogout() {
     setOwner(null);
@@ -1059,14 +1063,17 @@ function App() {
   function OwnerLoginModal() {
     return (
       <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
-        <div className="modal-dialog">
-          <div className="modal-content glass animate__animated animate__fadeInUp">
+        <div className="modal-dialog" style={{maxWidth:520}}>
+          <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
             <div className="modal-header">
               <h5 className="modal-title"><i className="bi bi-person-badge"></i> Owner Login</h5>
               <button type="button" className="btn-close" onClick={() => setShowOwnerLogin(false)}></button>
             </div>
             <div className="modal-body">
               <RegistrationLogin onOwnerLogin={handleOwnerLogin} showLoginOnly />
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary w-100" onClick={() => setShowOwnerLogin(false)}>Cancel</button>
             </div>
           </div>
         </div>
@@ -1077,14 +1084,59 @@ function App() {
   function OwnerRegModal() {
     return (
       <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
-        <div className="modal-dialog">
-          <div className="modal-content glass animate__animated animate__fadeInUp">
+        <div className="modal-dialog" style={{maxWidth:520}}>
+          <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
             <div className="modal-header">
               <h5 className="modal-title"><i className="bi bi-person-badge"></i> Owner Registration</h5>
               <button type="button" className="btn-close" onClick={() => setShowOwnerReg(false)}></button>
             </div>
             <div className="modal-body">
               <RegistrationLogin onOwnerLogin={handleOwnerLogin} showRegisterOnly />
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary w-100" onClick={() => setShowOwnerReg(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  // Modal for Tenant Login
+  function TenantLoginModal() {
+    return (
+      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+        <div className="modal-dialog" style={{maxWidth:520}}>
+          <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
+            <div className="modal-header">
+              <h5 className="modal-title"><i className="bi bi-people"></i> Tenant Login</h5>
+              <button type="button" className="btn-close" onClick={() => setShowTenantLogin(false)}></button>
+            </div>
+            <div className="modal-body">
+              <TenantDashboardV2 data={data} showLoginOnly />
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary w-100" onClick={() => setShowTenantLogin(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  // Modal for Tenant Registration
+  function TenantRegModal() {
+    return (
+      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+        <div className="modal-dialog" style={{maxWidth:520}}>
+          <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
+            <div className="modal-header">
+              <h5 className="modal-title"><i className="bi bi-people"></i> Tenant Registration</h5>
+              <button type="button" className="btn-close" onClick={() => setShowTenantReg(false)}></button>
+            </div>
+            <div className="modal-body">
+              <TenantRegistration data={data} setData={setData} showRegisterOnly />
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary w-100" onClick={() => setShowTenantReg(false)}>Cancel</button>
             </div>
           </div>
         </div>
@@ -1106,20 +1158,20 @@ function App() {
               <li className="nav-item">
                 <a className="nav-link" href="#" onClick={() => setShowOwnerReg(true)}>Owner Registration</a>
               </li>
-              <li className={page==='tenant' ? 'nav-item active' : 'nav-item'}>
-                <a className="nav-link" href="#" onClick={() => setPage('tenant')}>Tenant Login</a>
+              <li className="nav-item">
+                <a className="nav-link" href="#" onClick={() => setShowTenantLogin(true)}>Tenant Login</a>
               </li>
-              <li className={page==='tenantReg' ? 'nav-item active' : 'nav-item'}>
-                <a className="nav-link" href="#" onClick={() => setPage('tenantReg')}>Tenant Registration</a>
+              <li className="nav-item">
+                <a className="nav-link" href="#" onClick={() => setShowTenantReg(true)}>Tenant Registration</a>
               </li>
             </ul>
             {showOwnerLogin && <OwnerLoginModal />}
             {showOwnerReg && <OwnerRegModal />}
+            {showTenantLogin && <TenantLoginModal />}
+            {showTenantReg && <TenantRegModal />}
           </>
         )}
         {page === 'owner' && owner && <OwnerDashboardV2 owner={owner} data={data} setData={setData} onLogout={handleLogout} />}
-        {page === 'tenant' && <TenantDashboardV2 data={data} />}
-        {page === 'tenantReg' && <TenantRegistration data={data} setData={setData} />}
         {page === 'about' && <AboutUsTab />}
         {page === 'features' && <FeaturesTab />}
         {page === 'contact' && <ContactTab />}

@@ -663,15 +663,15 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
   const vacatedTenants = tenants.filter(t => t.vacated);
 
   return (
-    <div className="glass my-4 animate__animated animate__fadeInUp">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="mb-0"><i className="bi bi-person-badge"></i> Owner Dashboard</h2>
-        <span className="badge bg-secondary">{owner.buildingName}</span>
+    <div className="glass my-4 animate__animated animate__fadeInUp" style={{borderRadius:'24px', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)', padding:'32px 24px'}}>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="mb-0 text-primary"><i className="bi bi-person-badge"></i> Owner Dashboard</h2>
+        <span className="badge bg-secondary fs-5 px-3 py-2">{owner.buildingName}</span>
         <button className="btn btn-outline-danger btn-sm" onClick={onLogout}>Logout</button>
       </div>
-      <div className="row mb-4 g-3">
+      <div className="row mb-4 g-4">
         <div className="col-md-4">
-          <div className="card shadow-sm">
+          <div className="card glass border-0 shadow-sm h-100" style={{borderRadius:'18px', background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)'}}>
             <div className="card-body text-center">
               <h5 className="card-title">Total Tenants</h5>
               <span className="display-6 fw-bold text-primary">{tenants.length}</span>
@@ -679,7 +679,7 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card shadow-sm">
+          <div className="card glass border-0 shadow-sm h-100" style={{borderRadius:'18px', background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)'}}>
             <div className="card-body text-center">
               <h5 className="card-title">Approved Tenants</h5>
               <span className="display-6 fw-bold text-success">{approvedTenants.length}</span>
@@ -687,7 +687,7 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card shadow-sm">
+          <div className="card glass border-0 shadow-sm h-100" style={{borderRadius:'18px', background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)'}}>
             <div className="card-body text-center">
               <h5 className="card-title">Vacated Tenants</h5>
               <span className="display-6 fw-bold text-danger">{vacatedTenants.length}</span>
@@ -695,167 +695,171 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
           </div>
         </div>
       </div>
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4 className="mb-0">Tenants</h4>
-        <button className="btn btn-primary btn-sm" onClick={() => setShowAddTenant(true)}><i className="bi bi-person-plus"></i> Add Tenant</button>
-      </div>
-      {/* Add Tenant Modal */}
-      {showAddTenant && (
-        <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
-          <div className="modal-dialog">
-            <div className="modal-content glass animate__animated animate__fadeInUp">
-              <div className="modal-header">
-                <h5 className="modal-title"><i className="bi bi-person-plus"></i> Add New Tenant</h5>
-                <button type="button" className="btn-close" onClick={() => setShowAddTenant(false)}></button>
+      <div className="card glass border-0 shadow-sm mb-4" style={{borderRadius:'18px', background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)'}}>
+        <div className="card-body">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h4 className="mb-0 text-info">Tenants</h4>
+            <button className="btn btn-primary btn-sm" onClick={() => setShowAddTenant(true)}><i className="bi bi-person-plus"></i> Add Tenant</button>
+          </div>
+          {/* Add Tenant Modal */}
+          {showAddTenant && (
+            <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+              <div className="modal-dialog">
+                <div className="modal-content glass animate__animated animate__fadeInUp">
+                  <div className="modal-header">
+                    <h5 className="modal-title"><i className="bi bi-person-plus"></i> Add New Tenant</h5>
+                    <button type="button" className="btn-close" onClick={() => setShowAddTenant(false)}></button>
+                  </div>
+                  <form onSubmit={handleAddTenant} className="p-3">
+                    <div className="row g-3">
+                      <div className="col-md-6">
+                        <label className="form-label">Name</label>
+                        <input type="text" className="form-control" value={tenantName} onChange={e => setTenantName(e.target.value)} required />
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label">Email</label>
+                        <input type="email" className="form-control" value={tenantEmail} onChange={e => setTenantEmail(e.target.value)} required />
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label">Phone</label>
+                        <input type="text" className="form-control" value={tenantPhone} onChange={e => setTenantPhone(e.target.value)} required />
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label">Room No</label>
+                        <input type="text" className="form-control" value={tenantRoom} onChange={e => setTenantRoom(e.target.value)} required />
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label">Rent</label>
+                        <input type="number" className="form-control" value={tenantRent} onChange={e => setTenantRent(e.target.value)} required />
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label">Advance</label>
+                        <input type="number" className="form-control" value={tenantAdvance} onChange={e => setTenantAdvance(e.target.value)} required />
+                      </div>
+                    </div>
+                    {tenantError && <div className="alert alert-danger py-1 mt-2">{tenantError}</div>}
+                    {tenantSuccess && <div className="alert alert-success py-1 mt-2">{tenantSuccess}</div>}
+                    <div className="modal-footer mt-3">
+                      <button type="button" className="btn btn-secondary" onClick={() => setShowAddTenant(false)}>Close</button>
+                      <button className="btn btn-success" type="submit">Add Tenant</button>
+                    </div>
+                  </form>
+                </div>
               </div>
-              <form onSubmit={handleAddTenant} className="p-3">
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <label className="form-label">Name</label>
-                    <input type="text" className="form-control" value={tenantName} onChange={e => setTenantName(e.target.value)} required />
+            </div>
+          )}
+          {/* Modal for viewing/updating tenant details */}
+          {selectedTenant && editTenant && (
+            <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Edit Tenant Details</h5>
+                    <button type="button" className="btn-close" onClick={() => {setSelectedTenant(null); setEditTenant(null);}}></button>
                   </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Email</label>
-                    <input type="email" className="form-control" value={tenantEmail} onChange={e => setTenantEmail(e.target.value)} required />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Phone</label>
-                    <input type="text" className="form-control" value={tenantPhone} onChange={e => setTenantPhone(e.target.value)} required />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Room No</label>
-                    <input type="text" className="form-control" value={tenantRoom} onChange={e => setTenantRoom(e.target.value)} required />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Rent</label>
-                    <input type="number" className="form-control" value={tenantRent} onChange={e => setTenantRent(e.target.value)} required />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Advance</label>
-                    <input type="number" className="form-control" value={tenantAdvance} onChange={e => setTenantAdvance(e.target.value)} required />
-                  </div>
+                  <form onSubmit={handleUpdateTenant}>
+                    <div className="modal-body">
+                      <div className="mb-2">
+                        <label>Name</label>
+                        <input type="text" className="form-control" value={editTenant.name} onChange={e => setEditTenant({...editTenant, name: e.target.value})} />
+                      </div>
+                      <div className="mb-2">
+                        <label>Email</label>
+                        <input type="email" className="form-control" value={editTenant.email} onChange={e => setEditTenant({...editTenant, email: e.target.value})} />
+                      </div>
+                      <div className="mb-2">
+                        <label>Phone</label>
+                        <input type="text" className="form-control" value={editTenant.phone} onChange={e => setEditTenant({...editTenant, phone: e.target.value})} />
+                      </div>
+                      <div className="mb-2">
+                        <label>Room No</label>
+                        <input type="text" className="form-control" value={editTenant.roomNo} onChange={e => setEditTenant({...editTenant, roomNo: e.target.value})} />
+                      </div>
+                      <div className="mb-2">
+                        <label>Rent</label>
+                        <input type="number" className="form-control" value={editTenant.rentAmount} onChange={e => setEditTenant({...editTenant, rentAmount: parseInt(e.target.value)})} />
+                      </div>
+                      <div className="mb-2">
+                        <label>Advance</label>
+                        <input type="number" className="form-control" value={editTenant.advancePaid} onChange={e => setEditTenant({...editTenant, advancePaid: parseInt(e.target.value)})} />
+                      </div>
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-secondary" onClick={() => {setSelectedTenant(null); setEditTenant(null);}}>Close</button>
+                      <button type="submit" className="btn btn-primary">Save Changes</button>
+                    </div>
+                  </form>
                 </div>
-                {tenantError && <div className="alert alert-danger py-1 mt-2">{tenantError}</div>}
-                {tenantSuccess && <div className="alert alert-success py-1 mt-2">{tenantSuccess}</div>}
-                <div className="modal-footer mt-3">
-                  <button type="button" className="btn btn-secondary" onClick={() => setShowAddTenant(false)}>Close</button>
-                  <button className="btn btn-success" type="submit">Add Tenant</button>
-                </div>
-              </form>
+              </div>
+            </div>
+          )}
+          <div className="mb-4">
+            <h5 className="text-success">Awaiting Tenant Registration</h5>
+            <div className="table-responsive">
+              <table className="table table-striped align-middle">
+                <thead>
+                  <tr>
+                    <th>Name</th><th>Email</th><th>Room</th><th>Rent</th><th>Advance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {awaitingRegistration.length === 0 && <tr><td colSpan="5">No tenants awaiting registration.</td></tr>}
+                  {awaitingRegistration.map(t => (
+                    <tr key={t.tenantId} onClick={() => handleSelectTenant(t)} style={{cursor:'pointer'}}>
+                      <td>{t.name}</td><td>{t.email}</td><td>{t.roomNo}</td><td>₹{t.rentAmount}</td><td>₹{t.advancePaid}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
-      )}
-      {/* Modal for viewing/updating tenant details */}
-      {selectedTenant && editTenant && (
-        <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Edit Tenant Details</h5>
-                <button type="button" className="btn-close" onClick={() => {setSelectedTenant(null); setEditTenant(null);}}></button>
-              </div>
-              <form onSubmit={handleUpdateTenant}>
-                <div className="modal-body">
-                  <div className="mb-2">
-                    <label>Name</label>
-                    <input type="text" className="form-control" value={editTenant.name} onChange={e => setEditTenant({...editTenant, name: e.target.value})} />
-                  </div>
-                  <div className="mb-2">
-                    <label>Email</label>
-                    <input type="email" className="form-control" value={editTenant.email} onChange={e => setEditTenant({...editTenant, email: e.target.value})} />
-                  </div>
-                  <div className="mb-2">
-                    <label>Phone</label>
-                    <input type="text" className="form-control" value={editTenant.phone} onChange={e => setEditTenant({...editTenant, phone: e.target.value})} />
-                  </div>
-                  <div className="mb-2">
-                    <label>Room No</label>
-                    <input type="text" className="form-control" value={editTenant.roomNo} onChange={e => setEditTenant({...editTenant, roomNo: e.target.value})} />
-                  </div>
-                  <div className="mb-2">
-                    <label>Rent</label>
-                    <input type="number" className="form-control" value={editTenant.rentAmount} onChange={e => setEditTenant({...editTenant, rentAmount: parseInt(e.target.value)})} />
-                  </div>
-                  <div className="mb-2">
-                    <label>Advance</label>
-                    <input type="number" className="form-control" value={editTenant.advancePaid} onChange={e => setEditTenant({...editTenant, advancePaid: parseInt(e.target.value)})} />
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={() => {setSelectedTenant(null); setEditTenant(null);}}>Close</button>
-                  <button type="submit" className="btn btn-primary">Save Changes</button>
-                </div>
-              </form>
+          <div className="mb-4">
+            <h5 className="text-info">Pending Approvals (Registered Tenants)</h5>
+            <div className="table-responsive">
+              <table className="table table-striped align-middle">
+                <thead>
+                  <tr>
+                    <th>Name</th><th>Email</th><th>Room</th><th>Rent</th><th>Advance</th><th>Approve</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingTenants.length === 0 && <tr><td colSpan="6">No pending tenants.</td></tr>}
+                  {pendingTenants.map(t => (
+                    <tr key={t.tenantId} style={{cursor:'pointer'}}>
+                      <td onClick={() => handleSelectTenant(t)}>{t.name}</td>
+                      <td onClick={() => handleSelectTenant(t)}>{t.email}</td>
+                      <td onClick={() => handleSelectTenant(t)}>{t.roomNo}</td>
+                      <td onClick={() => handleSelectTenant(t)}>₹{t.rentAmount}</td>
+                      <td onClick={() => handleSelectTenant(t)}>₹{t.advancePaid}</td>
+                      <td><button className="btn btn-success btn-sm" onClick={e => {e.stopPropagation(); handleApproveTenant(t.tenantId);}}>Approve</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
-      )}
-      <div className="mb-4">
-        <h5>Awaiting Tenant Registration</h5>
-        <div className="table-responsive">
-          <table className="table table-striped align-middle">
-            <thead>
-              <tr>
-                <th>Name</th><th>Email</th><th>Room</th><th>Rent</th><th>Advance</th>
-              </tr>
-            </thead>
-            <tbody>
-              {awaitingRegistration.length === 0 && <tr><td colSpan="5">No tenants awaiting registration.</td></tr>}
-              {awaitingRegistration.map(t => (
-                <tr key={t.tenantId} onClick={() => handleSelectTenant(t)} style={{cursor:'pointer'}}>
-                  <td>{t.name}</td><td>{t.email}</td><td>{t.roomNo}</td><td>₹{t.rentAmount}</td><td>₹{t.advancePaid}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div className="mb-4">
-        <h5>Pending Approvals (Registered Tenants)</h5>
-        <div className="table-responsive">
-          <table className="table table-striped align-middle">
-            <thead>
-              <tr>
-                <th>Name</th><th>Email</th><th>Room</th><th>Rent</th><th>Advance</th><th>Approve</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pendingTenants.length === 0 && <tr><td colSpan="6">No pending tenants.</td></tr>}
-              {pendingTenants.map(t => (
-                <tr key={t.tenantId} style={{cursor:'pointer'}}>
-                  <td onClick={() => handleSelectTenant(t)}>{t.name}</td>
-                  <td onClick={() => handleSelectTenant(t)}>{t.email}</td>
-                  <td onClick={() => handleSelectTenant(t)}>{t.roomNo}</td>
-                  <td onClick={() => handleSelectTenant(t)}>₹{t.rentAmount}</td>
-                  <td onClick={() => handleSelectTenant(t)}>₹{t.advancePaid}</td>
-                  <td><button className="btn btn-success btn-sm" onClick={e => {e.stopPropagation(); handleApproveTenant(t.tenantId);}}>Approve</button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div className="mb-4">
-        <h5>Tenant History</h5>
-        <div className="table-responsive">
-          <table className="table table-striped align-middle">
-            <thead>
-              <tr>
-                <th>Name</th><th>Email</th><th>Room</th><th>Status</th><th>Last Paid</th><th>Vacate</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tenants.length === 0 && <tr><td colSpan="6">No tenants.</td></tr>}
-              {tenants.map(t => (
-                <tr key={t.tenantId} onClick={() => handleSelectTenant(t)} style={{cursor:'pointer'}}>
-                  <td>{t.name}</td><td>{t.email}</td><td>{t.roomNo}</td>
-                  <td>{t.status}</td><td>{t.lastPaidDate || '-'}</td>
-                  <td>{!t.vacated && t.approved ? <button className="btn btn-warning btn-sm" onClick={() => handleVacateTenant(t.tenantId)}>Vacate</button> : <span className="badge bg-secondary">Vacated</span>}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="mb-4">
+            <h5 className="text-warning">Tenant History</h5>
+            <div className="table-responsive">
+              <table className="table table-striped align-middle">
+                <thead>
+                  <tr>
+                    <th>Name</th><th>Email</th><th>Room</th><th>Status</th><th>Last Paid</th><th>Vacate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tenants.length === 0 && <tr><td colSpan="6">No tenants.</td></tr>}
+                  {tenants.map(t => (
+                    <tr key={t.tenantId} onClick={() => handleSelectTenant(t)} style={{cursor:'pointer'}}>
+                      <td>{t.name}</td><td>{t.email}</td><td>{t.roomNo}</td>
+                      <td>{t.status}</td><td>{t.lastPaidDate || '-'}</td>
+                      <td>{!t.vacated && t.approved ? <button className="btn btn-warning btn-sm" onClick={() => handleVacateTenant(t.tenantId)}>Vacate</button> : <span className="badge bg-secondary">Vacated</span>}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>

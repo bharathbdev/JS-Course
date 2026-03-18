@@ -863,115 +863,87 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
 }
 
 // --- Tenant Dashboard: Stylish, Modern, All Fields ---
-function TenantDashboardV2({ data }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
-  const [tenant, setTenant] = useState(null);
-
-  function handleLogin(e) {
-    e.preventDefault();
-    const t = data.tenants.find(t => t.email === email && t.phone === password && t.approved && !t.vacated);
-    if (t) {
-      setTenant(t);
-      setLoginError('');
-    } else {
-      setLoginError('Invalid credentials or not approved');
-    }
-  }
-
+function TenantDashboardV2({ tenant, data }) {
   if (!tenant) {
-    return (
-      <div className="glass my-4 animate__animated animate__fadeInUp" style={{maxWidth: 420, margin: '0 auto', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)', borderRadius:'16px'}}>
-        <h2 className="mb-3 text-center text-primary"><i className="bi bi-people"></i> Tenant Login</h2>
-        <form onSubmit={handleLogin} className="p-3">
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-            <input type="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Phone (as password)</label>
-            <input type="password" className="form-control" value={password} onChange={e => setPassword(e.target.value)} required />
-          </div>
-          {loginError && <div className="alert alert-danger py-1">{loginError}</div>}
-          <button className="btn btn-primary w-100" type="submit">Login</button>
-        </form>
-      </div>
-    );
+    return null;
   }
 
-  // Tenant dashboard content (read-only, stylish)
+  // Tenant dashboard content (full-width, stylish)
   const payments = data.payments.filter(p => p.tenantId === tenant.tenantId);
   return (
-    <div className="glass my-4 animate__animated animate__fadeInUp" style={{maxWidth: 600, margin: '0 auto', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)', borderRadius:'16px'}}>
-      <div className="d-flex align-items-center mb-4">
-        <img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt="Tenant" style={{width:60, height:60, borderRadius:'50%', marginRight:20}} />
-        <div>
-          <h2 className="mb-1 text-success">Welcome, {tenant.name}</h2>
-          <span className="badge bg-info">Room {tenant.roomNo}</span>
+    <div className="container-fluid animate__animated animate__fadeInUp" style={{marginTop:'80px', marginBottom:'80px', minHeight:'60vh'}}>
+      <div className="glass shadow-lg rounded-4 p-4 mb-4" style={{background:'rgba(255,255,255,0.18)', backdropFilter:'blur(12px)', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)'}}>
+        <div className="d-flex align-items-center mb-4">
+          <img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt="Tenant" style={{width:80, height:80, borderRadius:'50%', marginRight:24, border:'4px solid #0ea5e9', boxShadow:'0 4px 16px rgba(14,165,233,0.15)'}} />
+          <div>
+            <h2 className="mb-1 text-success fw-bold">Welcome, {tenant.name}</h2>
+            <span className="badge bg-info fs-6">Room {tenant.roomNo}</span>
+          </div>
+        </div>
+        <div className="row g-4 mb-4">
+          <div className="col-md-4">
+            <div className="card glass border-0 shadow-sm h-100">
+              <div className="card-body">
+                <h6 className="card-title text-primary">Email</h6>
+                <p className="card-text fw-bold">{tenant.email}</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card glass border-0 shadow-sm h-100">
+              <div className="card-body">
+                <h6 className="card-title text-primary">Phone</h6>
+                <p className="card-text fw-bold">{tenant.phone}</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card glass border-0 shadow-sm h-100">
+              <div className="card-body">
+                <h6 className="card-title text-primary">Status</h6>
+                <p className="card-text"><span className={`badge ${tenant.status==='Approved'?'bg-success':'bg-warning'}`}>{tenant.status}</span></p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card glass border-0 shadow-sm h-100">
+              <div className="card-body">
+                <h6 className="card-title text-primary">Rent Amount</h6>
+                <p className="card-text fw-bold">₹{tenant.rentAmount}</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card glass border-0 shadow-sm h-100">
+              <div className="card-body">
+                <h6 className="card-title text-primary">Advance Paid</h6>
+                <p className="card-text fw-bold">₹{tenant.advancePaid}</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card glass border-0 shadow-sm h-100">
+              <div className="card-body">
+                <h6 className="card-title text-primary">Last Paid Date</h6>
+                <p className="card-text fw-bold">{tenant.lastPaidDate || '-'}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="glass rounded-4 p-4 mb-2" style={{background:'rgba(255,255,255,0.22)', backdropFilter:'blur(8px)'}}>
+          <h5 className="mb-3 text-info"><i className="bi bi-currency-rupee"></i> Payment History</h5>
+          <ul className="list-group mb-2">
+            {payments.length === 0 && <li className="list-group-item">No payments yet.</li>}
+            {payments.map(p => (
+              <li className="list-group-item d-flex justify-content-between align-items-center" key={p.paymentId}>
+                <span className="fw-bold"><i className="bi bi-currency-rupee"></i>{p.amount}</span>
+                <span>{p.month}</span>
+                <span className="text-muted">{p.paymentDate}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-      <div className="row mb-4 g-3">
-        <div className="col-md-6">
-          <div className="card glass shadow-sm">
-            <div className="card-body">
-              <h6 className="card-title">Email</h6>
-              <p className="card-text">{tenant.email}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6">
-          <div className="card glass shadow-sm">
-            <div className="card-body">
-              <h6 className="card-title">Phone</h6>
-              <p className="card-text">{tenant.phone}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6">
-          <div className="card glass shadow-sm">
-            <div className="card-body">
-              <h6 className="card-title">Rent Amount</h6>
-              <p className="card-text">₹{tenant.rentAmount}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6">
-          <div className="card glass shadow-sm">
-            <div className="card-body">
-              <h6 className="card-title">Advance Paid</h6>
-              <p className="card-text">₹{tenant.advancePaid}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6">
-          <div className="card glass shadow-sm">
-            <div className="card-body">
-              <h6 className="card-title">Status</h6>
-              <p className="card-text"><span className={`badge ${tenant.status==='Approved'?'bg-success':'bg-warning'}`}>{tenant.status}</span></p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6">
-          <div className="card glass shadow-sm">
-            <div className="card-body">
-              <h6 className="card-title">Last Paid Date</h6>
-              <p className="card-text">{tenant.lastPaidDate || '-'}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <h5 className="mt-4 mb-2">Payment History</h5>
-      <ul className="list-group mb-4">
-        {payments.length === 0 && <li className="list-group-item">No payments yet.</li>}
-        {payments.map(p => (
-          <li className="list-group-item" key={p.paymentId}>
-            <span className="me-2"><i className="bi bi-currency-rupee"></i>{p.amount}</span>
-            <span className="me-2">{p.month}</span>
-            <span className="text-muted">{p.paymentDate}</span>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
@@ -1086,12 +1058,23 @@ function ContactTab() {
 }
 
 function App() {
+    const [tenant, setTenant] = useState(null);
+    function handleTenantLogin(email, phone) {
+      const t = data.tenants.find(t => t.email === email && t.phone === phone && t.approved && !t.vacated);
+      console.log('Tenant login attempt:', email, phone, t);
+      if (t) {
+        setTenant(t);
+        setPage('tenant');
+        return true;
+      } else {
+        return false;
+      }
+    }
   const [owner, setOwner] = useState(null);
   const [data, setData] = useState(loadData());
   const [page, setPage] = useState('home'); // home, owner, tenant, tenantReg, about, features, contact
   const [showOwnerLogin, setShowOwnerLogin] = useState(false);
   const [showOwnerReg, setShowOwnerReg] = useState(false);
-  const [showTenantLogin, setShowTenantLogin] = useState(false);
   const [showTenantReg, setShowTenantReg] = useState(false);
 
   useEffect(() => { saveData(data); }, [data]);
@@ -1111,7 +1094,6 @@ function App() {
     setPage('owner');
     setShowOwnerLogin(false);
     setShowOwnerReg(false);
-    setShowTenantLogin(false);
     setShowTenantReg(false);
   }
   function handleLogout() {
@@ -1164,23 +1146,34 @@ function App() {
     );
   }
   // Modal for Tenant Login
-  function TenantLoginModal() {
+  // Full page tenant login form
+  function TenantLoginForm({ onTenantLogin }) {
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [error, setError] = useState('');
+    function handleLogin(e) {
+      e.preventDefault();
+      setError('');
+      const success = onTenantLogin(email, phone);
+      if (!success) {
+        setError('Invalid credentials, not approved, or not found.');
+      }
+    }
     return (
-      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)', marginTop:'48px'}}>
-        <div className="modal-dialog" style={{maxWidth:520}}>
-          <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
-            <div className="modal-header">
-              <h5 className="modal-title"><i className="bi bi-people"></i> Tenant Login</h5>
-              <button type="button" className="btn-close" onClick={() => setShowTenantLogin(false)}></button>
-            </div>
-            <div className="modal-body">
-              <TenantDashboardV2 data={data} showLoginOnly />
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary w-100" onClick={() => setShowTenantLogin(false)}>Cancel</button>
-            </div>
+      <div className="glass animate__animated animate__fadeInUp" style={{maxWidth: 420, margin: '80px auto 80px auto', minHeight:'60vh', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)', borderRadius:'24px', padding:'32px 24px'}}>
+        <h2 className="mb-3 text-center text-primary"><i className="bi bi-people"></i> Tenant Login</h2>
+        <form onSubmit={handleLogin} className="p-3">
+          <div className="mb-3">
+            <label className="form-label">Email</label>
+            <input type="email" className="form-control form-control-lg" value={email} onChange={e => setEmail(e.target.value)} required />
           </div>
-        </div>
+          <div className="mb-3">
+            <label className="form-label">Phone (as password)</label>
+            <input type="password" className="form-control form-control-lg" value={phone} onChange={e => setPhone(e.target.value)} required />
+          </div>
+          {error && <div className="alert alert-danger py-1">{error}</div>}
+          <button className="btn btn-primary w-100 btn-lg mt-2" type="submit">Login</button>
+        </form>
       </div>
     );
   }
@@ -1221,7 +1214,7 @@ function App() {
                 <a className="nav-link" href="#" onClick={() => setShowOwnerReg(true)}>Owner Registration</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#" onClick={() => setShowTenantLogin(true)}>Tenant Login</a>
+                <a className="nav-link" href="#" onClick={() => setPage('tenantLogin')}>Tenant Login</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#" onClick={() => setShowTenantReg(true)}>Tenant Registration</a>
@@ -1229,10 +1222,14 @@ function App() {
             </ul>
             {showOwnerLogin && <OwnerLoginModal />}
             {showOwnerReg && <OwnerRegModal />}
-            {showTenantLogin && <TenantLoginModal />}
             {showTenantReg && <TenantRegModal />}
           </>
         )}
+        {(page === 'tenantLogin' || page === 'tenant') && !tenant ? (
+          <TenantLoginForm onTenantLogin={handleTenantLogin} />
+        ) : (page === 'tenant' && tenant) ? (
+          <TenantDashboardV2 key={tenant.tenantId} tenant={tenant} data={data} />
+        ) : null}
         {page === 'owner' && owner && <OwnerDashboardV2 owner={owner} data={data} setData={setData} onLogout={handleLogout} />}
         {page === 'about' && <AboutUsTab />}
         {page === 'features' && <FeaturesTab />}

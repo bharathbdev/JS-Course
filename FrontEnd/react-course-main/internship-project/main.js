@@ -1,23 +1,21 @@
 const { useState, useEffect } = React;
 
 // --- Modern Navbar ---
-function Navbar() {
+function Navbar({ page, setPage }) {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-gradient" style={{background: 'linear-gradient(90deg,#6366f1,#0ea5e9)'}}>
-      <div className="container">
-        <a className="navbar-brand fw-bold fs-3" href="#">
-          <i className="bi bi-building"></i> Smart Rent Management
-        </a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navMenu">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li className="nav-item"><a className="nav-link active" href="#">Dashboard</a></li>
-            <li className="nav-item"><a className="nav-link" href="#">Features</a></li>
-            <li className="nav-item"><a className="nav-link" href="#">Contact</a></li>
-          </ul>
+    <nav className="navbar navbar-expand-lg navbar-dark navbar-fixed-top shadow-sm" style={{background: 'linear-gradient(90deg,#23272f,#0ea5e9)', color:'#fff', position:'fixed', top:0, width:'100%', zIndex:1000}}>
+      <div className="container-fluid">
+        <div className="navbar-header">
+          <a className="navbar-brand fw-bold fs-3" href="#" style={{color:'#fff'}}>
+            <i className="bi bi-building"></i> Smart Rent Management
+          </a>
         </div>
+        <ul className="nav navbar-nav ms-auto mb-2 mb-lg-0">
+          <li className={page==='home' ? 'active nav-item' : 'nav-item'}><a className="nav-link" href="#" onClick={() => setPage('home')}>Dashboard</a></li>
+          <li className={page==='about' ? 'active nav-item' : 'nav-item'}><a className="nav-link" href="#" onClick={() => setPage('about')}>About Us</a></li>
+          <li className={page==='features' ? 'active nav-item' : 'nav-item'}><a className="nav-link" href="#" onClick={() => setPage('features')}>Features</a></li>
+          <li className={page==='contact' ? 'active nav-item' : 'nav-item'}><a className="nav-link" href="#" onClick={() => setPage('contact')}>Contact</a></li>
+        </ul>
       </div>
     </nav>
   );
@@ -988,10 +986,60 @@ function Footer() {
 }
 
 // --- Main App ---
+// --- About Us, Features, Contact Tabs ---
+function AboutUsTab() {
+  return (
+    <div className="glass my-4 animate__animated animate__fadeInUp" style={{maxWidth:700,margin:'0 auto'}}>
+      <h2 className="mb-3 text-center text-primary"><i className="bi bi-info-circle"></i> About Us</h2>
+      <p className="lead">Smart Rent Management is a modern web app designed for building owners and tenants to manage rent, automate reminders, and streamline communication. Built with React and Bootstrap for a stylish, responsive experience.</p>
+      <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80" className="img-fluid rounded-4 border border-3 border-info shadow-lg mb-3" alt="About" />
+      <p>Our mission is to make rent management simple, efficient, and beautiful for everyone.</p>
+    </div>
+  );
+}
+function FeaturesTab() {
+  return (
+    <div className="glass my-4 animate__animated animate__fadeInUp" style={{maxWidth:700,margin:'0 auto'}}>
+      <h2 className="mb-3 text-center text-success"><i className="bi bi-stars"></i> Features</h2>
+      <ul className="list-group mb-3">
+        <li className="list-group-item">Owner & Tenant Registration/Login</li>
+        <li className="list-group-item">Add, Approve, and Manage Tenants</li>
+        <li className="list-group-item">Automated Rent Reminders</li>
+        <li className="list-group-item">Modern, Responsive UI</li>
+        <li className="list-group-item">Glassmorphism, Bootstrap, Animations</li>
+      </ul>
+      <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1200&q=80" className="img-fluid rounded-4 border border-3 border-success shadow-lg mb-3" alt="Features" />
+    </div>
+  );
+}
+function ContactTab() {
+  return (
+    <div className="glass my-4 animate__animated animate__fadeInUp" style={{maxWidth:700,margin:'0 auto'}}>
+      <h2 className="mb-3 text-center text-info"><i className="bi bi-envelope"></i> Contact</h2>
+      <p className="lead">Have questions or feedback? Reach out to us!</p>
+      <form className="mb-3">
+        <div className="mb-3">
+          <input type="text" className="form-control" placeholder="Your Name" required />
+        </div>
+        <div className="mb-3">
+          <input type="email" className="form-control" placeholder="Your Email" required />
+        </div>
+        <div className="mb-3">
+          <textarea className="form-control" rows={3} placeholder="Your Message" required></textarea>
+        </div>
+        <button className="btn btn-info w-100" type="submit">Send Message</button>
+      </form>
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80" className="img-fluid rounded-4 border border-3 border-primary shadow-lg mb-3" alt="Contact" />
+    </div>
+  );
+}
+
 function App() {
   const [owner, setOwner] = useState(null);
   const [data, setData] = useState(loadData());
-  const [page, setPage] = useState('home'); // home, owner, tenant, tenantReg
+  const [page, setPage] = useState('home'); // home, owner, tenant, tenantReg, about, features, contact
+  const [showOwnerLogin, setShowOwnerLogin] = useState(false);
+  const [showOwnerReg, setShowOwnerReg] = useState(false);
 
   useEffect(() => { saveData(data); }, [data]);
 
@@ -999,26 +1047,82 @@ function App() {
     setOwner(ownerObj);
     setData(dataObj);
     setPage('owner');
+    setShowOwnerLogin(false);
+    setShowOwnerReg(false);
   }
   function handleLogout() {
     setOwner(null);
     setPage('home');
   }
 
+  // Modal for Owner Login
+  function OwnerLoginModal() {
+    return (
+      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+        <div className="modal-dialog">
+          <div className="modal-content glass animate__animated animate__fadeInUp">
+            <div className="modal-header">
+              <h5 className="modal-title"><i className="bi bi-person-badge"></i> Owner Login</h5>
+              <button type="button" className="btn-close" onClick={() => setShowOwnerLogin(false)}></button>
+            </div>
+            <div className="modal-body">
+              <RegistrationLogin onOwnerLogin={handleOwnerLogin} showLoginOnly />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  // Modal for Owner Registration
+  function OwnerRegModal() {
+    return (
+      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
+        <div className="modal-dialog">
+          <div className="modal-content glass animate__animated animate__fadeInUp">
+            <div className="modal-header">
+              <h5 className="modal-title"><i className="bi bi-person-badge"></i> Owner Registration</h5>
+              <button type="button" className="btn-close" onClick={() => setShowOwnerReg(false)}></button>
+            </div>
+            <div className="modal-body">
+              <RegistrationLogin onOwnerLogin={handleOwnerLogin} showRegisterOnly />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <Navbar />
-      <HeroSection />
+      <Navbar page={page} setPage={setPage} />
+      {page === 'home' && <HeroSection />}
       <div className="container">
-        <div className="d-flex justify-content-center mb-3">
-          <button className="btn btn-outline-primary me-2 rounded-pill shadow-sm" onClick={() => setPage('home')}><i className="bi bi-person-badge"></i> Owner</button>
-          <button className="btn btn-outline-success me-2 rounded-pill shadow-sm" onClick={() => setPage('tenant')}><i className="bi bi-people"></i> Tenant</button>
-          <button className="btn btn-outline-info rounded-pill shadow-sm" onClick={() => setPage('tenantReg')}><i className="bi bi-person-plus"></i> Tenant Registration</button>
-        </div>
-        {page === 'home' && <RegistrationLogin onOwnerLogin={handleOwnerLogin} />}
+        {page === 'home' && (
+          <>
+            <ul className="nav nav-tabs mb-4 justify-content-center">
+              <li className="nav-item">
+                <a className="nav-link" href="#" onClick={() => setShowOwnerLogin(true)}>Owner Login</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#" onClick={() => setShowOwnerReg(true)}>Owner Registration</a>
+              </li>
+              <li className={page==='tenant' ? 'nav-item active' : 'nav-item'}>
+                <a className="nav-link" href="#" onClick={() => setPage('tenant')}>Tenant Login</a>
+              </li>
+              <li className={page==='tenantReg' ? 'nav-item active' : 'nav-item'}>
+                <a className="nav-link" href="#" onClick={() => setPage('tenantReg')}>Tenant Registration</a>
+              </li>
+            </ul>
+            {showOwnerLogin && <OwnerLoginModal />}
+            {showOwnerReg && <OwnerRegModal />}
+          </>
+        )}
         {page === 'owner' && owner && <OwnerDashboardV2 owner={owner} data={data} setData={setData} onLogout={handleLogout} />}
         {page === 'tenant' && <TenantDashboardV2 data={data} />}
         {page === 'tenantReg' && <TenantRegistration data={data} setData={setData} />}
+        {page === 'about' && <AboutUsTab />}
+        {page === 'features' && <FeaturesTab />}
+        {page === 'contact' && <ContactTab />}
       </div>
       <Footer />
     </>

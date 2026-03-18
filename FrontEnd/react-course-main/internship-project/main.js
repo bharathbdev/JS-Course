@@ -1095,6 +1095,15 @@ function App() {
   const [showTenantReg, setShowTenantReg] = useState(false);
 
   useEffect(() => { saveData(data); }, [data]);
+  useEffect(() => {
+    if (owner) {
+      document.body.style.overflowY = 'auto';
+      document.documentElement.style.overflowY = 'auto';
+    } else {
+      document.body.style.overflowY = 'hidden';
+      document.documentElement.style.overflowY = 'hidden';
+    }
+  }, [owner]);
 
   function handleOwnerLogin(ownerObj, dataObj) {
     setOwner(ownerObj);

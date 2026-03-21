@@ -413,17 +413,34 @@ function TenantDashboard() {
         <strong>Status:</strong> {tenant.status === 'Paid' ? <span className="badge bg-success">Paid</span> : <span className="badge bg-danger">Pending</span>}<br/>
         <strong>Last Paid Date:</strong> {tenant.lastPaidDate}
       </div>
-      <h5>Payment History</h5>
-      <ul className="list-group">
-        {payments.length === 0 && <li className="list-group-item">No payments yet.</li>}
-        {payments.map(p => (
-          <li className="list-group-item" key={p.paymentId}>
-            <span className="me-2"><i className="bi bi-currency-rupee"></i>{p.amount}</span>
-            <span className="me-2">{p.month}</span>
-            <span className="text-muted">{p.paymentDate}</span>
-          </li>
-        ))}
-      </ul>
+
+      {tenant && (
+        <div className="glass rounded-4 p-4 mb-2" style={{background:'rgba(255,255,255,0.22)', backdropFilter:'blur(8px)'}}>
+          <h5 className="mb-3 text-info"><i className="bi bi-calendar3"></i> 2026 Rent Status</h5>
+          <div className="table-responsive" style={{maxHeight:'220px', overflowY:'auto'}}>
+            <table className="table table-bordered table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Rent</th>
+                  <th>Paid</th>
+                  <th>Payment Mode</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getTenant2026Payments(tenant).map((p) => (
+                  <tr key={p.month}>
+                    <td>{p.month}</td>
+                    <td>₹{p.rent}</td>
+                    <td>{p.paid ? <span className="badge bg-success">Paid</span> : <span className="badge bg-danger">Not Paid</span>}</td>
+                    <td>{p.mode}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -575,6 +592,42 @@ function RegistrationLogin(props) {
 
 // --- Owner Dashboard: Add Tenants, View/Update Tenant Details, Approve, View History ---
 function OwnerDashboardV2({ owner, data, setData, onLogout }) {
+    // Helper: get months of 2026
+    const months2026 = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    // Helper: get or initialize payment status for a tenant for 2026
+    function getTenant2026Payments(tenant) {
+      // Always return an array of 12 months, each with its own rent
+      const arr = Array.isArray(tenant.payments2026) ? tenant.payments2026 : [];
+      return months2026.map(m => {
+        const found = arr.find(p => p.month === m);
+        return found
+          ? { month: m, paid: !!found.paid, mode: found.mode || 'UPI', rent: typeof found.rent === 'number' ? found.rent : (tenant.rentAmount || 0) }
+          : { month: m, paid: false, mode: 'UPI', rent: tenant.rentAmount || 0 };
+      });
+    }
+
+    // Save payment status for a tenant
+    function setTenant2026Payments(tenantId, newPayments2026) {
+      const newTenants = data.tenants.map(t =>
+        t.tenantId === tenantId ? { ...t, payments2026: newPayments2026 } : t
+      );
+      setData({ ...data, tenants: newTenants });
+    }
+
+    // Defensive: ensure tenants is always an array
+    const safeTenants = Array.isArray(data.tenants) ? data.tenants.filter(t => t.ownerId === owner.ownerId) : [];
+    // Calculate total rent collected from 2026 checkboxes for all tenants
+    const totalRentCollected2026 = safeTenants.reduce((sum, t) => {
+      const pays = Array.isArray(getTenant2026Payments(t)) ? getTenant2026Payments(t) : [];
+      // Sum up each paid month's rent (per month)
+      const paidSum = pays.filter(p => p.paid).reduce((acc, p) => acc + (typeof p.rent === 'number' ? p.rent : (t.rentAmount || 0)), 0);
+      return sum + paidSum;
+    }, 0);
+
   const [showAddTenant, setShowAddTenant] = useState(false);
   const [tenantName, setTenantName] = useState('');
   const [tenantEmail, setTenantEmail] = useState('');
@@ -656,21 +709,31 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
     setEditTenant(null);
   }
 
-  const tenants = data.tenants.filter(t => t.ownerId === owner.ownerId);
+  const tenants = safeTenants;
   const pendingTenants = tenants.filter(t => t.registered && !t.approved && !t.vacated);
   const awaitingRegistration = tenants.filter(t => !t.registered && !t.vacated);
   const approvedTenants = tenants.filter(t => t.approved && !t.vacated);
   const vacatedTenants = tenants.filter(t => t.vacated);
 
+  // Calculate total rent collected by all tenants
+  const ownerTenantIds = tenants.map(t => t.tenantId);
+  // Defensive: ensure payments is always an array
+  const paymentsArr = Array.isArray(data.payments) ? data.payments : [];
+  // Old payments sum (if needed)
+  const totalRentCollected = paymentsArr
+    .filter(p => ownerTenantIds.includes(p.tenantId))
+    .reduce((sum, p) => sum + p.amount, 0);
+
+  // Final total: sum of both
+  const totalRentAll = totalRentCollected + totalRentCollected2026;
   return (
     <div className="glass my-4 animate__animated animate__fadeInUp" style={{borderRadius:'24px', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)', padding:'32px 24px'}}>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0 text-primary"><i className="bi bi-person-badge"></i> Owner Dashboard</h2>
         <span className="badge bg-secondary fs-5 px-3 py-2">{owner.buildingName}</span>
-        <button className="btn btn-outline-danger btn-sm" onClick={onLogout}>Logout</button>
       </div>
       <div className="row mb-4 g-4">
-        <div className="col-md-4">
+        <div className="col-md-3">
           <div className="card glass border-0 shadow-sm h-100" style={{borderRadius:'18px', background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)'}}>
             <div className="card-body text-center">
               <h5 className="card-title">Total Tenants</h5>
@@ -678,7 +741,7 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
             </div>
           </div>
         </div>
-        <div className="col-md-4">
+        <div className="col-md-3">
           <div className="card glass border-0 shadow-sm h-100" style={{borderRadius:'18px', background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)'}}>
             <div className="card-body text-center">
               <h5 className="card-title">Approved Tenants</h5>
@@ -686,11 +749,20 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
             </div>
           </div>
         </div>
-        <div className="col-md-4">
+        <div className="col-md-3">
           <div className="card glass border-0 shadow-sm h-100" style={{borderRadius:'18px', background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)'}}>
             <div className="card-body text-center">
               <h5 className="card-title">Vacated Tenants</h5>
               <span className="display-6 fw-bold text-danger">{vacatedTenants.length}</span>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="card glass border-0 shadow-sm h-100" style={{borderRadius:'18px', background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)'}}>
+            <div className="card-body text-center">
+              <h5 className="card-title">Total Rent Collected</h5>
+              <span className="display-6 fw-bold text-info">₹{totalRentAll}</span>
+              <div className="small text-muted">(2026 checkboxes + payments)</div>
             </div>
           </div>
         </div>
@@ -751,7 +823,7 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
           {/* Modal for viewing/updating tenant details */}
           {selectedTenant && editTenant && (
             <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)'}}>
-              <div className="modal-dialog">
+              <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Edit Tenant Details</h5>
@@ -759,34 +831,96 @@ function OwnerDashboardV2({ owner, data, setData, onLogout }) {
                   </div>
                   <form onSubmit={handleUpdateTenant}>
                     <div className="modal-body">
-                      <div className="mb-2">
-                        <label>Name</label>
-                        <input type="text" className="form-control" value={editTenant.name} onChange={e => setEditTenant({...editTenant, name: e.target.value})} />
-                      </div>
-                      <div className="mb-2">
-                        <label>Email</label>
-                        <input type="email" className="form-control" value={editTenant.email} onChange={e => setEditTenant({...editTenant, email: e.target.value})} />
-                      </div>
-                      <div className="mb-2">
-                        <label>Phone</label>
-                        <input type="text" className="form-control" value={editTenant.phone} onChange={e => setEditTenant({...editTenant, phone: e.target.value})} />
-                      </div>
-                      <div className="mb-2">
-                        <label>Room No</label>
-                        <input type="text" className="form-control" value={editTenant.roomNo} onChange={e => setEditTenant({...editTenant, roomNo: e.target.value})} />
-                      </div>
-                      <div className="mb-2">
-                        <label>Rent</label>
-                        <input type="number" className="form-control" value={editTenant.rentAmount} onChange={e => setEditTenant({...editTenant, rentAmount: parseInt(e.target.value)})} />
-                      </div>
-                      <div className="mb-2">
-                        <label>Advance</label>
-                        <input type="number" className="form-control" value={editTenant.advancePaid} onChange={e => setEditTenant({...editTenant, advancePaid: parseInt(e.target.value)})} />
+                      <div className="row">
+                        <div className="col-md-6">
+                          <div className="mb-2">
+                            <label>Name</label>
+                            <input type="text" className="form-control" value={editTenant.name} onChange={e => setEditTenant({...editTenant, name: e.target.value})} />
+                          </div>
+                          <div className="mb-2">
+                            <label>Email</label>
+                            <input type="email" className="form-control" value={editTenant.email} onChange={e => setEditTenant({...editTenant, email: e.target.value})} />
+                          </div>
+                          <div className="mb-2">
+                            <label>Phone</label>
+                            <input type="text" className="form-control" value={editTenant.phone} onChange={e => setEditTenant({...editTenant, phone: e.target.value})} />
+                          </div>
+                          <div className="mb-2">
+                            <label>Room No</label>
+                            <input type="text" className="form-control" value={editTenant.roomNo} onChange={e => setEditTenant({...editTenant, roomNo: e.target.value})} />
+                          </div>
+                          <div className="mb-2">
+                            <label>Rent</label>
+                            <input type="number" className="form-control" value={editTenant.rentAmount} onChange={e => setEditTenant({...editTenant, rentAmount: parseInt(e.target.value)})} />
+                          </div>
+                          <div className="mb-2">
+                            <label>Advance</label>
+                            <input type="number" className="form-control" value={editTenant.advancePaid} onChange={e => setEditTenant({...editTenant, advancePaid: parseInt(e.target.value)})} />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <label className="mb-2">2026 Rent Status</label>
+                          <div className="table-responsive">
+                            <table className="table table-bordered table-sm align-middle">
+                              <thead>
+                                <tr>
+                                  <th>Month</th>
+                                  <th>Rent</th>
+                                  <th>Paid</th>
+                                  <th>Payment Mode</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {getTenant2026Payments(editTenant).map((p, idx) => (
+                                  <tr key={p.month}>
+                                    <td>{p.month}</td>
+                                    <td>
+                                      <input
+                                        type="number"
+                                        className="form-control form-control-sm"
+                                        min="0"
+                                        value={p.rent}
+                                        onChange={e => {
+                                          const updated = getTenant2026Payments(editTenant).map((row, i) => i === idx ? { ...row, rent: parseInt(e.target.value) || 0 } : row);
+                                          setEditTenant({ ...editTenant, payments2026: updated });
+                                        }}
+                                        style={{width:'90px' }}
+                                      />
+                                    </td>
+                                    <td>
+                                      <input type="checkbox" checked={p.paid} onChange={e => {
+                                        const updated = getTenant2026Payments(editTenant).map((row, i) => i === idx ? { ...row, paid: e.target.checked } : row);
+                                        setEditTenant({ ...editTenant, payments2026: updated });
+                                      }} />
+                                    </td>
+                                    <td>
+                                      <select className="form-select form-select-sm" value={p.mode} onChange={e => {
+                                        const updated = getTenant2026Payments(editTenant).map((row, i) => i === idx ? { ...row, mode: e.target.value } : row);
+                                        setEditTenant({ ...editTenant, payments2026: updated });
+                                      }}>
+                                        <option value="UPI">UPI</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Card">Card</option>
+                                      </select>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="modal-footer">
                       <button type="button" className="btn btn-secondary" onClick={() => {setSelectedTenant(null); setEditTenant(null);}}>Close</button>
-                      <button type="submit" className="btn btn-primary">Save Changes</button>
+                      <button type="submit" className="btn btn-primary"
+                        onClick={e => {
+                          // Save 2026 payments on save
+                          if (editTenant.payments2026) {
+                            setTenant2026Payments(editTenant.tenantId, editTenant.payments2026);
+                          }
+                        }}
+                      >Save Changes</button>
                     </div>
                   </form>
                 </div>
@@ -872,11 +1006,26 @@ function TenantDashboardV2({ tenant, data }) {
     return null;
   }
 
+  // Helper: get or initialize payment status for a tenant for 2026
+  function getTenant2026Payments(tenant) {
+    const months2026 = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const arr = Array.isArray(tenant.payments2026) ? tenant.payments2026 : [];
+    return months2026.map(m => {
+      const found = arr.find(p => p.month === m);
+      return found
+        ? { month: m, paid: !!found.paid, mode: found.mode || 'UPI', rent: typeof found.rent === 'number' ? found.rent : (tenant.rentAmount || 0) }
+        : { month: m, paid: false, mode: 'UPI', rent: tenant.rentAmount || 0 };
+    });
+  }
+
   // Tenant dashboard content (full-width, stylish)
   const payments = data.payments.filter(p => p.tenantId === tenant.tenantId);
   return (
     <div className="container-fluid animate__animated animate__fadeInUp" style={{marginTop:'80px', marginBottom:'80px', minHeight:'60vh'}}>
-      <div className="glass shadow-lg rounded-4 p-4 mb-4" style={{background:'rgba(255,255,255,0.18)', backdropFilter:'blur(12px)', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)'}}>
+      <div className="glass shadow-lg rounded-4 p-4 mb-4" style={{background:'rgba(255,255,255,0.18)', backdropFilter:'blur(12px)', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)', maxHeight:'75vh', overflowY:'auto'}}>
         <div className="d-flex align-items-center mb-4">
           <img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt="Tenant" style={{width:80, height:80, borderRadius:'50%', marginRight:24, border:'4px solid #0ea5e9', boxShadow:'0 4px 16px rgba(14,165,233,0.15)'}} />
           <div>
@@ -935,17 +1084,29 @@ function TenantDashboardV2({ tenant, data }) {
           </div>
         </div>
         <div className="glass rounded-4 p-4 mb-2" style={{background:'rgba(255,255,255,0.22)', backdropFilter:'blur(8px)'}}>
-          <h5 className="mb-3 text-info"><i className="bi bi-currency-rupee"></i> Payment History</h5>
-          <ul className="list-group mb-2">
-            {payments.length === 0 && <li className="list-group-item">No payments yet.</li>}
-            {payments.map(p => (
-              <li className="list-group-item d-flex justify-content-between align-items-center" key={p.paymentId}>
-                <span className="fw-bold"><i className="bi bi-currency-rupee"></i>{p.amount}</span>
-                <span>{p.month}</span>
-                <span className="text-muted">{p.paymentDate}</span>
-              </li>
-            ))}
-          </ul>
+          <h5 className="mb-3 text-info"><i className="bi bi-calendar3"></i> 2026 Rent Status</h5>
+          <div className="table-responsive" style={{maxHeight:'220px', overflowY:'auto'}}>
+            <table className="table table-bordered table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Rent</th>
+                  <th>Paid</th>
+                  <th>Payment Mode</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getTenant2026Payments(tenant).map((p) => (
+                  <tr key={p.month}>
+                    <td>{p.month}</td>
+                    <td>₹{p.rent}</td>
+                    <td>{p.paid ? <span className="badge bg-success">Paid</span> : <span className="badge bg-danger">Not Paid</span>}</td>
+                    <td>{p.mode}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

@@ -1340,28 +1340,35 @@ function App() {
         setError('Invalid credentials, not approved, or not found.');
       }
     }
+    // Use modal style exactly like OwnerLoginModal
     return (
-      <div className="glass animate__animated animate__fadeInUp" style={{maxWidth: 420, margin: '80px auto 80px auto', minHeight:'60vh', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)', borderRadius:'24px', padding:'32px 24px'}}>
-        <h2 className="mb-3 text-center text-primary"><i className="bi bi-people"></i> Tenant Login</h2>
-        <form onSubmit={handleLogin} className="p-3">
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-            <input type="email" className="form-control form-control-lg" value={email} onChange={e => setEmail(e.target.value)} required />
+      <div className="modal d-block" tabIndex="-1" style={{background: 'rgba(0,0,0,0.3)', marginTop:'48px'}}>
+        <div className="modal-dialog" style={{maxWidth:520}}>
+          <div className="modal-content glass animate__animated animate__fadeInUp" style={{borderRadius:'24px'}}>
+            <div className="modal-header">
+              <h5 className="modal-title"><i className="bi bi-people"></i> Tenant Login</h5>
+              <button type="button" className="btn-close" onClick={() => setPage('home')}></button>
+            </div>
+            <div className="modal-body">
+              {/* Only show Tenant Login form, no extra padding or scroll */}
+              <form onSubmit={handleLogin}>
+                <div className="mb-3">
+                  <label className="form-label">Email</label>
+                  <input type="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Phone (as password)</label>
+                  <input type="password" className="form-control" value={phone} onChange={e => setPhone(e.target.value)} required />
+                </div>
+                {error && <div className="alert alert-danger py-1">{error}</div>}
+                <button className="btn btn-primary w-100" type="submit">Login</button>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary w-100" onClick={() => setPage('home')}>Cancel</button>
+            </div>
           </div>
-          <div className="mb-3">
-            <label className="form-label">Phone (as password)</label>
-            <input type="password" className="form-control form-control-lg" value={phone} onChange={e => setPhone(e.target.value)} required />
-          </div>
-          {error && <div className="alert alert-danger py-1">{error}</div>}
-          <button className="btn btn-primary w-100 btn-lg mt-2" type="submit">Login</button>
-                  <div className="modal-footer mt-3">
-          <button className="btn btn-secondary w-100" type="button" onClick={() => setPage('home')}>Cancel</button>
         </div>
-        </form>
-
-
-
-         
       </div>
     );
   }

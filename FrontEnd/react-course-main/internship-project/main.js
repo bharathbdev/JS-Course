@@ -402,7 +402,7 @@ function TenantDashboard() {
   // Tenant dashboard content
   const payments = data.payments.filter(p => p.tenantId === tenant.tenantId);
   return (
-    <div className="glass my-4 animate__animated animate__fadeInUp">
+    <div className="glass my-4 animate__animated animate__fadeInUp" style={{maxHeight:'80vh', overflowY:'auto', borderRadius:'24px', boxShadow:'0 8px 32px 0 rgba(31,38,135,0.15)', padding:'32px 24px'}}>
       <h2 className="mb-3"><i className="bi bi-people"></i> Tenant Dashboard</h2>
       <div className="mb-3">
         <strong>Name:</strong> {tenant.name}<br/>
@@ -441,6 +441,7 @@ function TenantDashboard() {
           </div>
         </div>
       )}
+
     </div>
   );
 }
@@ -1074,14 +1075,6 @@ function TenantDashboardV2({ tenant, data }) {
               </div>
             </div>
           </div>
-          <div className="col-md-4">
-            <div className="card glass border-0 shadow-sm h-100">
-              <div className="card-body">
-                <h6 className="card-title text-primary">Last Paid Date</h6>
-                <p className="card-text fw-bold">{tenant.lastPaidDate || '-'}</p>
-              </div>
-            </div>
-          </div>
         </div>
         <div className="glass rounded-4 p-4 mb-2" style={{background:'rgba(255,255,255,0.22)', backdropFilter:'blur(8px)'}}>
           <h5 className="mb-3 text-info"><i className="bi bi-calendar3"></i> 2026 Rent Status</h5>
@@ -1108,6 +1101,21 @@ function TenantDashboardV2({ tenant, data }) {
             </table>
           </div>
         </div>
+                              {/* Pay Rent Section */}
+      <div className="glass rounded-4 p-4 mb-4" style={{background:'rgba(255,255,255,0.22)', backdropFilter:'blur(8px)'}}>
+        <h5 className="mb-3 text-success"><i className="bi bi-currency-rupee"></i> Pay Rent</h5>
+        <div className="d-flex flex-wrap align-items-center">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=9538802191@ybl&pn=OwnerName" alt="Owner UPI QR" style={{width:150, height:150, marginRight:24, borderRadius:'12px', border:'2px solid #0ea5e9', background:'#fff'}} />
+          <div>
+            <div className="mb-2">
+              <strong>Scan to Pay via UPI</strong>
+            </div>
+            <div className="mb-2">
+                  <span className="badge bg-info fs-6">UPI ID: <span style={{fontWeight:'bold'}}>9538802191@ybl</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   );

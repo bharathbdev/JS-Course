@@ -14,10 +14,18 @@ function Navbar({ page, setPage }) {
           </a>
         </div>
         <ul className="nav navbar-nav ms-auto mb-2 mb-lg-0">
-          <li className={page==='home' ? 'active nav-item' : 'nav-item'}><a className="nav-link" href="#" onClick={() => setPage('home')}>Dashboard</a></li>
-          <li className={page==='about' ? 'active nav-item' : 'nav-item'}><a className="nav-link" href="#" onClick={() => setPage('about')}>About Us</a></li>
-          <li className={page==='features' ? 'active nav-item' : 'nav-item'}><a className="nav-link" href="#" onClick={() => setPage('features')}>Features</a></li>
-          <li className={page==='contact' ? 'active nav-item' : 'nav-item'}><a className="nav-link" href="#" onClick={() => setPage('contact')}>Contact</a></li>
+          <li className={page==='home' ? 'active nav-item' : 'nav-item'}>
+            <a className="nav-link" href="#" style={{color:'#e0e0e0', fontWeight:'bold'}} onClick={() => setPage('home')}>Dashboard</a>
+          </li>
+          <li className={page==='about' ? 'active nav-item' : 'nav-item'}>
+            <a className="nav-link" href="#" style={{color:'#e0e0e0', fontWeight:'bold'}} onClick={() => setPage('about')}>About Us</a>
+          </li>
+          <li className={page==='features' ? 'active nav-item' : 'nav-item'}>
+            <a className="nav-link" href="#" style={{color:'#e0e0e0', fontWeight:'bold'}} onClick={() => setPage('features')}>Features</a>
+          </li>
+          <li className={page==='contact' ? 'active nav-item' : 'nav-item'}>
+            <a className="nav-link" href="#" style={{color:'#e0e0e0', fontWeight:'bold'}} onClick={() => setPage('contact')}>Contact</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -1346,7 +1354,14 @@ function App() {
           </div>
           {error && <div className="alert alert-danger py-1">{error}</div>}
           <button className="btn btn-primary w-100 btn-lg mt-2" type="submit">Login</button>
+                  <div className="modal-footer mt-3">
+          <button className="btn btn-secondary w-100" type="button" onClick={() => setPage('home')}>Cancel</button>
+        </div>
         </form>
+
+
+
+         
       </div>
     );
   }
